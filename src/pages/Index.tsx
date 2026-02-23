@@ -23,9 +23,6 @@ const Index = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
           >
-            <p className="text-primary/80 text-xs tracking-[0.5em] uppercase mb-8 font-cinzel">
-              Established 2024
-            </p>
             <h1 className="font-cinzel text-6xl md:text-8xl lg:text-9xl font-bold tracking-[0.15em] text-gold-gradient mb-6">
               NOVER NOIR
             </h1>

@@ -19,12 +19,26 @@ export interface Review {
 
 export const products: Product[] = [
   {
+    id: "golden-santal",
+    name: "Golden Santal",
+    price: 849,
+    image: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=600&h=800&fit=crop",
+    description: "Creamy sandalwood infused with golden honey and warm spices. A scent that wraps you in pure luxury.",
+    fragranceFamily: "Woody",
+    topNotes: ["Cinnamon", "Honey"],
+    middleNotes: ["Sandalwood", "Iris"],
+    baseNotes: ["Musk", "Amber", "Vanilla"],
+    reviews: [
+      { name: "Divya L.", rating: 5, comment: "Smells expensive. Can't believe the price." },
+    ],
+  },
+  {
     id: "midnight-oud",
     name: "Midnight Oud",
     price: 899,
-    image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=600&h=800&fit=crop",
+    image: "/vs.svg", //slash name likhna
     description: "A captivating blend of smoky oud and velvety amber, evoking the mystery of midnight. Bold yet refined, this scent lingers like a whispered secret.",
-    fragranceFamily: "Oriental",
+    fragranceFamily: "Papa",
     topNotes: ["Saffron", "Bergamot"],
     middleNotes: ["Oud", "Rose"],
     baseNotes: ["Amber", "Sandalwood", "Musk"],
@@ -78,27 +92,14 @@ export const products: Product[] = [
       { name: "Meera J.", rating: 4, comment: "Love the citrus opening. Great summer fragrance." },
     ],
   },
-  {
-    id: "golden-santal",
-    name: "Golden Santal",
-    price: 849,
-    image: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=600&h=800&fit=crop",
-    description: "Creamy sandalwood infused with golden honey and warm spices. A scent that wraps you in pure luxury.",
-    fragranceFamily: "Woody",
-    topNotes: ["Cinnamon", "Honey"],
-    middleNotes: ["Sandalwood", "Iris"],
-    baseNotes: ["Musk", "Amber", "Vanilla"],
-    reviews: [
-      { name: "Divya L.", rating: 5, comment: "Smells expensive. Can't believe the price." },
-    ],
-  },
+  
   {
     id: "oud-royale",
     name: "Oud Royale",
     price: 999,
     image: "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=600&h=800&fit=crop",
     description: "The crown jewel of our collection. Pure oud blended with royal saffron and precious woods. For those who demand the extraordinary.",
-    fragranceFamily: "Oriental",
+    fragranceFamily: "Papa",
     topNotes: ["Saffron", "Cinnamon"],
     middleNotes: ["Oud", "Bulgarian Rose"],
     baseNotes: ["Agarwood", "Leather", "Amber"],

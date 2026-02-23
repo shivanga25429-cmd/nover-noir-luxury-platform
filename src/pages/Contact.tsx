@@ -8,11 +8,31 @@ import { toast } from "sonner";
 const Contact = () => {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast.success("Thank you! We'll get back to you soon.", { description: "Your message has been sent." });
-    setForm({ name: "", email: "", message: "" });
-  };
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+
+  const { name, email, message } = form;
+
+  const subject = encodeURIComponent(
+    `New Contact Message from ${name}`
+  );
+
+  const body = encodeURIComponent(
+    `Name: ${name}\n` +
+    `Email: ${email}\n\n` +
+    `Message:\n${message}`
+  );
+
+  const mailtoLink = `mailto:novernoir@gmail.com?subject=${subject}&body=${body}`;
+
+  window.location.href = mailtoLink;
+
+  toast.success("Opening your mail app...", {
+    description: "Please click send in your email client.",
+  });
+
+  setForm({ name: "", email: "", message: "" });
+};
 
   return (
     <main className="pt-24 pb-20">
@@ -37,7 +57,7 @@ const Contact = () => {
                   placeholder="Your name"
                 />
               </div>
-              <div className="space-y-2">
+              {/* <div className="space-y-2">
                 <Label htmlFor="email" className="font-cinzel text-xs tracking-[0.15em] uppercase">Email</Label>
                 <Input
                   id="email"
@@ -48,7 +68,7 @@ const Contact = () => {
                   className="bg-secondary border-border focus:border-primary"
                   placeholder="your@email.com"
                 />
-              </div>
+              </div> */}
               <div className="space-y-2">
                 <Label htmlFor="message" className="font-cinzel text-xs tracking-[0.15em] uppercase">Message</Label>
                 <Textarea
@@ -67,14 +87,15 @@ const Contact = () => {
               >
                 Send Message
               </button>
+              
             </form>
 
             <div className="mt-16 text-center space-y-3 text-sm text-muted-foreground">
-              <p>hello@novernoir.com</p>
-              <p>+91 98765 43210</p>
+              <a href="mailto:novernoir@gmail.com"><p>novernoir@gmail.com</p></a>
+              <a href="https://wa.me/917983339080" target="_blank"><p>+91 79833 39080</p></a>
               <div className="flex justify-center gap-6 pt-2">
-                <a href="#" className="hover:text-primary transition-colors">Instagram</a>
-                <a href="#" className="hover:text-primary transition-colors">Twitter</a>
+                <a href="https://www.instagram.com/novernoir/" className="hover:text-primary transition-colors">Instagram</a>
+                <a href="" className="hover:text-primary transition-colors">Twitter</a>
                 <a href="#" className="hover:text-primary transition-colors">Facebook</a>
               </div>
             </div>
