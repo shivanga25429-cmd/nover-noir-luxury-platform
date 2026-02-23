@@ -19,8 +19,8 @@ export interface Review {
 
 export const products: Product[] = [
   {
-    id: "golden-santal",
-    name: "Golden Santal",
+    id: "Noir-Vanile",
+    name: "Noir Vanile",
     price: 849,
     image: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=600&h=800&fit=crop",
     description: "Creamy sandalwood infused with golden honey and warm spices. A scent that wraps you in pure luxury.",
@@ -33,8 +33,8 @@ export const products: Product[] = [
     ],
   },
   {
-    id: "midnight-oud",
-    name: "Midnight Oud",
+    id: "midnight-rush",
+    name: "Midnight Rush",
     price: 899,
     image: "/vs.svg", //slash name likhna
     description: "A captivating blend of smoky oud and velvety amber, evoking the mystery of midnight. Bold yet refined, this scent lingers like a whispered secret.",
@@ -48,8 +48,8 @@ export const products: Product[] = [
     ],
   },
   {
-    id: "velvet-rose",
-    name: "Velvet Rose",
+    id: "onyx-bloom",
+    name: "Onyx Bloom",
     price: 749,
     image: "https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=600&h=800&fit=crop",
     description: "An opulent bouquet of Damascena rose wrapped in warm vanilla and soft musk. Romantic, timeless, unforgettable.",
@@ -63,8 +63,8 @@ export const products: Product[] = [
     ],
   },
   {
-    id: "noir-amber",
-    name: "Noir Amber",
+    id: "crown-elixir",
+    name: "Crown Elixir",
     price: 999,
     image: "https://images.unsplash.com/photo-1594035910387-fbd1a485b12e?w=600&h=800&fit=crop",
     description: "Liquid gold in a bottle. Rich amber intertwined with smoky vetiver and a kiss of dark vanilla. The quintessence of luxury.",
@@ -78,8 +78,8 @@ export const products: Product[] = [
     ],
   },
   {
-    id: "citrus-noir",
-    name: "Citrus Noir",
+    id: "midnight-veil",
+    name: "Midnight Veil",
     price: 599,
     image: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=600&h=800&fit=crop",
     description: "Fresh citrus zest meets dark, woody depth. A modern fragrance for those who dare to be different.",
@@ -94,8 +94,8 @@ export const products: Product[] = [
   },
   
   {
-    id: "oud-royale",
-    name: "Oud Royale",
+    id: "oud-sovereign",
+    name: "Oud Svoereign",
     price: 999,
     image: "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=600&h=800&fit=crop",
     description: "The crown jewel of our collection. Pure oud blended with royal saffron and precious woods. For those who demand the extraordinary.",
