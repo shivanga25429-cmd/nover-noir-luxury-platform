@@ -95,7 +95,7 @@ export const products: Product[] = [
   
   {
     id: "oud-sovereign",
-    name: "Oud Svoereign",
+    name: "Oud Sovereign",
     price: 999,
     image: "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=600&h=800&fit=crop",
     description: "The crown jewel of our collection. Pure oud blended with royal saffron and precious woods. For those who demand the extraordinary.",
