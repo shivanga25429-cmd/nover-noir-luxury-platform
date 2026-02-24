@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useState } from "react";
 import { useCart } from "@/context/CartContext";
+import { toast } from "@/components/ui/sonner";
 import { Product } from "@/data/products";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, Minus, Plus } from "lucide-react";
 
 interface ProductCardProps {
   product: Product;
@@ -11,6 +13,7 @@ interface ProductCardProps {
 
 const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
   const { addToCart } = useCart();
+  const [qty, setQty] = useState<number>(1);
 
   return (
     <motion.div
@@ -34,8 +37,34 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
       <div className="space-y-2">
         <h3 className="font-cinzel text-sm tracking-[0.15em] uppercase">{product.name}</h3>
         <p className="text-primary font-cinzel text-lg">₹{product.price}</p>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setQty((q) => Math.max(1, q - 1))}
+            className="w-8 h-8 grid place-items-center border border-border rounded-sm"
+            aria-label="Decrease quantity"
+          >
+            <Minus className="w-3.5 h-3.5" />
+          </button>
+          <input
+            type="number"
+            min={1}
+            value={qty}
+            onChange={(e) => setQty(Math.max(1, Number(e.target.value) || 1))}
+            className="w-12 text-center bg-secondary border border-border rounded-sm h-8"
+          />
+          <button
+            onClick={() => setQty((q) => q + 1)}
+            className="w-8 h-8 grid place-items-center border border-border rounded-sm"
+            aria-label="Increase quantity"
+          >
+            <Plus className="w-3.5 h-3.5" />
+          </button>
+        </div>
         <button
-          onClick={() => addToCart(product)}
+          onClick={() => {
+            addToCart(product, qty);
+            toast.success("Added to cart", { description: `${qty} × ${product.name} added to your cart.` });
+          }}
           className="flex items-center gap-2 text-xs tracking-[0.15em] uppercase text-muted-foreground hover:text-primary transition-all duration-300 group/btn"
         >
           <ShoppingBag className="w-3.5 h-3.5" />

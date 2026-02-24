@@ -2,11 +2,15 @@ import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { products } from "@/data/products";
 import { useCart } from "@/context/CartContext";
+import { toast } from "@/components/ui/sonner";
+import { useState } from "react";
+import { Minus, Plus } from "lucide-react";
 import { ShoppingBag, Star, ArrowLeft } from "lucide-react";
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { addToCart } = useCart();
+  const [qty, setQty] = useState<number>(1);
   const product = products.find((p) => p.id === id);
 
   if (!product) {
@@ -69,8 +73,27 @@ const ProductDetail = () => {
               ))}
             </div>
 
+            <div className="flex items-center gap-3 mb-4">
+              <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="w-9 h-9 grid place-items-center border border-border rounded-sm">
+                <Minus className="w-4 h-4" />
+              </button>
+              <input
+                type="number"
+                min={1}
+                value={qty}
+                onChange={(e) => setQty(Math.max(1, Number(e.target.value) || 1))}
+                className="w-16 text-center bg-secondary border border-border rounded-sm h-9"
+              />
+              <button onClick={() => setQty((q) => q + 1)} className="w-9 h-9 grid place-items-center border border-border rounded-sm">
+                <Plus className="w-4 h-4" />
+              </button>
+            </div>
+
             <button
-              onClick={() => addToCart(product)}
+              onClick={() => {
+                addToCart(product, qty);
+                toast.success("Added to cart", { description: `${qty} × ${product.name} added to your cart.` });
+              }}
               className="flex items-center justify-center gap-3 bg-primary text-primary-foreground font-cinzel text-sm tracking-[0.2em] uppercase px-10 py-4 transition-all duration-500 gold-glow-hover hover:scale-[1.02] w-full lg:w-auto"
             >
               <ShoppingBag className="w-4 h-4" />
