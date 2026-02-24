@@ -21,7 +21,7 @@ export const products: Product[] = [
   {
     id: "Noir-Vanile",
     name: "Noir Vanile",
-    price: 849,
+    price: 179,
     image: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=600&h=800&fit=crop",
     description: "Creamy sandalwood infused with golden honey and warm spices. A scent that wraps you in pure luxury.",
     fragranceFamily: "Woody",
@@ -35,7 +35,7 @@ export const products: Product[] = [
   {
     id: "midnight-rush",
     name: "Midnight Rush",
-    price: 899,
+    price: 179,
     image: "/vs.svg", //slash name likhna
     description: "A captivating blend of smoky oud and velvety amber, evoking the mystery of midnight. Bold yet refined, this scent lingers like a whispered secret.",
     fragranceFamily: "Papa",
@@ -50,7 +50,7 @@ export const products: Product[] = [
   {
     id: "onyx-bloom",
     name: "Onyx Bloom",
-    price: 749,
+    price: 179,
     image: "https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=600&h=800&fit=crop",
     description: "An opulent bouquet of Damascena rose wrapped in warm vanilla and soft musk. Romantic, timeless, unforgettable.",
     fragranceFamily: "Floral",
@@ -65,7 +65,7 @@ export const products: Product[] = [
   {
     id: "crown-elixir",
     name: "Crown Elixir",
-    price: 999,
+    price: 499,
     image: "https://images.unsplash.com/photo-1594035910387-fbd1a485b12e?w=600&h=800&fit=crop",
     description: "Liquid gold in a bottle. Rich amber intertwined with smoky vetiver and a kiss of dark vanilla. The quintessence of luxury.",
     fragranceFamily: "Woody",
@@ -80,7 +80,7 @@ export const products: Product[] = [
   {
     id: "midnight-veil",
     name: "Midnight Veil",
-    price: 599,
+    price: 499,
     image: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=600&h=800&fit=crop",
     description: "Fresh citrus zest meets dark, woody depth. A modern fragrance for those who dare to be different.",
     fragranceFamily: "Fresh",
@@ -96,7 +96,7 @@ export const products: Product[] = [
   {
     id: "oud-sovereign",
     name: "Oud Sovereign",
-    price: 999,
+    price: 499,
     image: "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=600&h=800&fit=crop",
     description: "The crown jewel of our collection. Pure oud blended with royal saffron and precious woods. For those who demand the extraordinary.",
     fragranceFamily: "Papa",
