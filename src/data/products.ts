@@ -22,7 +22,8 @@ export const products: Product[] = [
     id: "Noir-Vanile",
     name: "Noir Vanile",
     price: 179,
-    image: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=600&h=800&fit=crop",
+  // Replaced: local mockup will be placed in public/mockups/mockup2.png
+  image: "/mockups/mockup2.png",
     description: "Creamy sandalwood infused with golden honey and warm spices. A scent that wraps you in pure luxury.",
     fragranceFamily: "Woody",
     topNotes: ["Cinnamon", "Honey"],
@@ -36,7 +37,8 @@ export const products: Product[] = [
     id: "midnight-rush",
     name: "Midnight Rush",
     price: 179,
-    image: "/vs.svg", //slash name likhna
+  // Replaced: local mockup will be placed in public/mockups/mockup3.png
+  image: "/mockups/mockup3.png",
     description: "A captivating blend of smoky oud and velvety amber, evoking the mystery of midnight. Bold yet refined, this scent lingers like a whispered secret.",
     fragranceFamily: "Papa",
     topNotes: ["Saffron", "Bergamot"],
@@ -51,7 +53,8 @@ export const products: Product[] = [
     id: "onyx-bloom",
     name: "Onyx Bloom",
     price: 179,
-    image: "https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=600&h=800&fit=crop",
+  // Replaced: local mockup will be placed in public/mockups/mockup1.png
+  image: "/mockups/mockup1.png",
     description: "An opulent bouquet of Damascena rose wrapped in warm vanilla and soft musk. Romantic, timeless, unforgettable.",
     fragranceFamily: "Floral",
     topNotes: ["Pink Pepper", "Lychee"],
