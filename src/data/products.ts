@@ -22,8 +22,8 @@ export const products: Product[] = [
     id: "Noir-Vanile",
     name: "Noir Vanile",
     price: 179,
-  // Replaced: local mockup will be placed in public/mockups/mockup2.png
-  image: "/mockups/mockup2.png",
+  // Replaced: local mockup will be placed in public/mockups/mock2.png
+  image: "/mockups/mock2.png",
     description: "Creamy sandalwood infused with golden honey and warm spices. A scent that wraps you in pure luxury.",
     fragranceFamily: "Woody",
     topNotes: ["Cinnamon", "Honey"],
@@ -37,8 +37,8 @@ export const products: Product[] = [
     id: "midnight-rush",
     name: "Midnight Rush",
     price: 179,
-  // Replaced: local mockup will be placed in public/mockups/mockup3.png
-  image: "/mockups/mockup3.png",
+  // Replaced: local mockup will be placed in public/mockups/mock3.png
+  image: "/mockups/mock3.png",
     description: "A captivating blend of smoky oud and velvety amber, evoking the mystery of midnight. Bold yet refined, this scent lingers like a whispered secret.",
     fragranceFamily: "Papa",
     topNotes: ["Saffron", "Bergamot"],
@@ -53,8 +53,8 @@ export const products: Product[] = [
     id: "onyx-bloom",
     name: "Onyx Bloom",
     price: 179,
-  // Replaced: local mockup will be placed in public/mockups/mockup1.png
-  image: "/mockups/mockup1.png",
+  // Replaced: local mockup will be placed in public/mockups/mock1.png
+  image: "/mockups/mock1.png",
     description: "An opulent bouquet of Damascena rose wrapped in warm vanilla and soft musk. Romantic, timeless, unforgettable.",
     fragranceFamily: "Floral",
     topNotes: ["Pink Pepper", "Lychee"],
@@ -69,7 +69,7 @@ export const products: Product[] = [
     id: "crown-elixir",
     name: "Crown Elixir",
     price: 499,
-    image: "https://images.unsplash.com/photo-1594035910387-fbd1a485b12e?w=600&h=800&fit=crop",
+    image: "/mockups/mock4.png",
     description: "Liquid gold in a bottle. Rich amber intertwined with smoky vetiver and a kiss of dark vanilla. The quintessence of luxury.",
     fragranceFamily: "Woody",
     topNotes: ["Black Pepper", "Cardamom"],
@@ -84,7 +84,7 @@ export const products: Product[] = [
     id: "midnight-veil",
     name: "Midnight Veil",
     price: 499,
-    image: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=600&h=800&fit=crop",
+    image: "/mockups/mock5.png",
     description: "Fresh citrus zest meets dark, woody depth. A modern fragrance for those who dare to be different.",
     fragranceFamily: "Fresh",
     topNotes: ["Bergamot", "Grapefruit", "Lemon"],
@@ -100,7 +100,7 @@ export const products: Product[] = [
     id: "oud-sovereign",
     name: "Oud Sovereign",
     price: 499,
-    image: "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=600&h=800&fit=crop",
+    image: "/mockups/mock6.png",
     description: "The crown jewel of our collection. Pure oud blended with royal saffron and precious woods. For those who demand the extraordinary.",
     fragranceFamily: "Papa",
     topNotes: ["Saffron", "Cinnamon"],
