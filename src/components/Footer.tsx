@@ -29,12 +29,17 @@ const Footer = () => {
           <div>
             <h4 className="font-cinzel text-sm tracking-[0.2em] uppercase text-foreground mb-4">Contact</h4>
             <div className="space-y-3 text-sm text-muted-foreground">
-              <p>novernoir@gmail.com</p>
+              <p>support@novernoir.com</p>
               <p>+91 79833 39080</p>
               <div className="flex gap-4 pt-2">
-                <a href="https://www.instagram.com/novernoir/" className="hover:text-primary transition-colors">Instagram</a>
-                <a href="#" className="hover:text-primary transition-colors">Twitter</a>
-                <a href="#" className="hover:text-primary transition-colors">Facebook</a>
+                <a href="https://www.instagram.com/novernoir/" className="hover:text-primary transition-colors" target="_blank" rel="noopener noreferrer">Instagram</a>
+                <a href="https://x.com/Novernoir" className="hover:text-primary transition-colors" target="_blank" rel="noopener noreferrer">X</a>
+                <a href="https://www.facebook.com/profile.php?id=61588661760494" className="hover:text-primary transition-colors" target="_blank" rel="noopener noreferrer">Facebook</a>
+                <a href="https://www.youtube.com/@NoverNoir" className="hover:text-primary transition-colors" target="_blank" rel="noopener noreferrer">YouTube</a>
+              </div>
+              <div className="pt-4 flex flex-col sm:flex-row sm:justify-start sm:gap-4">
+                <a href="https://drive.google.com/file/d/1SsDSi-XcOL2DAgz_-39QZW-TCgsHhzcZ/view?usp=sharing" className="text-sm text-muted-foreground hover:text-primary transition-colors" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+                <a href="https://drive.google.com/file/d/1vwMKByQqqM41prZOtPdN8gD0LZKjDvIR/view?usp=sharing" className="text-sm text-muted-foreground hover:text-primary transition-colors" target="_blank" rel="noopener noreferrer">Terms & Conditions</a>
               </div>
             </div>
           </div>

@@ -23,7 +23,7 @@ const Contact = () => {
     `Message:\n${message}`
   );
 
-  const mailtoLink = `mailto:novernoir@gmail.com?subject=${subject}&body=${body}`;
+  const mailtoLink = `mailto:support@novernoir.com?subject=${subject}&body=${body}`;
 
   window.location.href = mailtoLink;
 
@@ -91,12 +91,12 @@ const Contact = () => {
             </form>
 
             <div className="mt-16 text-center space-y-3 text-sm text-muted-foreground">
-              <a href="mailto:novernoir@gmail.com"><p>novernoir@gmail.com</p></a>
-              <a href="https://wa.me/917983339080" target="_blank"><p>+91 79833 39080</p></a>
+              <a href="mailto:support@novernoir.com"><p>support@novernoir.com</p></a>
+              <a href="https://wa.me/917983339080" target="_blank" rel="noopener noreferrer"><p>+91 79833 39080</p></a>
               <div className="flex justify-center gap-6 pt-2">
-                <a href="https://www.instagram.com/novernoir/" className="hover:text-primary transition-colors">Instagram</a>
-                <a href="" className="hover:text-primary transition-colors">Twitter</a>
-                <a href="#" className="hover:text-primary transition-colors">Facebook</a>
+                <a href="https://www.instagram.com/novernoir/" className="hover:text-primary transition-colors" target="_blank" rel="noopener noreferrer">Instagram</a>
+                <a href="https://x.com/Novernoir" className="hover:text-primary transition-colors" target="_blank" rel="noopener noreferrer">X</a>
+                <a href="https://www.facebook.com/profile.php?id=61588661760494" className="hover:text-primary transition-colors" target="_blank" rel="noopener noreferrer">Facebook</a>
               </div>
             </div>
           </motion.div>
