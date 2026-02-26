@@ -1,3 +1,11 @@
+import { fetchProducts, ProductDB } from '@/lib/supabase';
+
+export interface Review {
+  name: string;
+  rating: number;
+  comment: string;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -11,107 +19,57 @@ export interface Product {
   reviews: Review[];
 }
 
-export interface Review {
-  name: string;
-  rating: number;
-  comment: string;
+// Local reviews data (not stored in DB for now)
+const productReviews: Record<string, Review[]> = {
+  "Noir-Vanile": [
+    { name: "Divya L.", rating: 5, comment: "Smells expensive. Can't believe the price." },
+  ],
+  "midnight-rush": [
+    { name: "Arjun M.", rating: 5, comment: "Absolutely incredible. Lasts all day and gets compliments everywhere." },
+    { name: "Priya S.", rating: 4, comment: "Rich and sophisticated. Perfect for evening wear." },
+  ],
+  "onyx-bloom": [
+    { name: "Sneha R.", rating: 5, comment: "This is my signature scent now. Elegant and long-lasting." },
+    { name: "Karan D.", rating: 5, comment: "Gifted this to my partner. She absolutely loves it." },
+  ],
+  "crown-elixir": [
+    { name: "Rohan K.", rating: 5, comment: "Premium quality at this price is unbelievable. My go-to fragrance." },
+    { name: "Ananya P.", rating: 4, comment: "Warm and inviting. Perfect for winter evenings." },
+  ],
+  "midnight-veil": [
+    { name: "Vikram S.", rating: 5, comment: "Fresh yet deep. Perfect for daily wear." },
+    { name: "Meera J.", rating: 4, comment: "Love the citrus opening. Great summer fragrance." },
+  ],
+  "oud-sovereign": [
+    { name: "Rahul T.", rating: 5, comment: "This is the best oud fragrance I've ever tried at any price point." },
+    { name: "Aisha N.", rating: 5, comment: "Royalty in a bottle. Worth every rupee." },
+  ],
+};
+
+// Convert DB product to frontend Product format
+function mapProductFromDB(dbProduct: ProductDB): Product {
+  return {
+    id: dbProduct.id,
+    name: dbProduct.name,
+    price: dbProduct.price,
+    image: dbProduct.image || '',
+    description: dbProduct.description || '',
+    fragranceFamily: dbProduct.fragrance_family || '',
+    topNotes: dbProduct.top_notes || [],
+    middleNotes: dbProduct.middle_notes || [],
+    baseNotes: dbProduct.base_notes || [],
+    reviews: productReviews[dbProduct.id] || [],
+  };
 }
 
-export const products: Product[] = [
-  {
-    id: "Noir-Vanile",
-    name: "Noir Vanile",
-    price: 179,
-  // Replaced: local mockup will be placed in public/mockups/mock2.png
-  image: "/mockups/mock2.png",
-    description: "Creamy sandalwood infused with golden honey and warm spices. A scent that wraps you in pure luxury.",
-    fragranceFamily: "Woody",
-    topNotes: ["Cinnamon", "Honey"],
-    middleNotes: ["Sandalwood", "Iris"],
-    baseNotes: ["Musk", "Amber", "Vanilla"],
-    reviews: [
-      { name: "Divya L.", rating: 5, comment: "Smells expensive. Can't believe the price." },
-    ],
-  },
-  {
-    id: "midnight-rush",
-    name: "Midnight Rush",
-    price: 179,
-  // Replaced: local mockup will be placed in public/mockups/mock3.png
-  image: "/mockups/mock3.png",
-    description: "A captivating blend of smoky oud and velvety amber, evoking the mystery of midnight. Bold yet refined, this scent lingers like a whispered secret.",
-    fragranceFamily: "Papa",
-    topNotes: ["Saffron", "Bergamot"],
-    middleNotes: ["Oud", "Rose"],
-    baseNotes: ["Amber", "Sandalwood", "Musk"],
-    reviews: [
-      { name: "Arjun M.", rating: 5, comment: "Absolutely incredible. Lasts all day and gets compliments everywhere." },
-      { name: "Priya S.", rating: 4, comment: "Rich and sophisticated. Perfect for evening wear." },
-    ],
-  },
-  {
-    id: "onyx-bloom",
-    name: "Onyx Bloom",
-    price: 179,
-  // Replaced: local mockup will be placed in public/mockups/mock1.png
-  image: "/mockups/mock1.png",
-    description: "An opulent bouquet of Damascena rose wrapped in warm vanilla and soft musk. Romantic, timeless, unforgettable.",
-    fragranceFamily: "Floral",
-    topNotes: ["Pink Pepper", "Lychee"],
-    middleNotes: ["Damascena Rose", "Peony"],
-    baseNotes: ["Vanilla", "White Musk", "Patchouli"],
-    reviews: [
-      { name: "Sneha R.", rating: 5, comment: "This is my signature scent now. Elegant and long-lasting." },
-      { name: "Karan D.", rating: 5, comment: "Gifted this to my partner. She absolutely loves it." },
-    ],
-  },
-  {
-    id: "crown-elixir",
-    name: "Crown Elixir",
-    price: 499,
-    image: "/mockups/mock4.png",
-    description: "Liquid gold in a bottle. Rich amber intertwined with smoky vetiver and a kiss of dark vanilla. The quintessence of luxury.",
-    fragranceFamily: "Woody",
-    topNotes: ["Black Pepper", "Cardamom"],
-    middleNotes: ["Amber", "Vetiver"],
-    baseNotes: ["Dark Vanilla", "Tonka Bean", "Cedar"],
-    reviews: [
-      { name: "Rohan K.", rating: 5, comment: "Premium quality at this price is unbelievable. My go-to fragrance." },
-      { name: "Ananya P.", rating: 4, comment: "Warm and inviting. Perfect for winter evenings." },
-    ],
-  },
-  {
-    id: "midnight-veil",
-    name: "Midnight Veil",
-    price: 499,
-    image: "/mockups/mock5.png",
-    description: "Fresh citrus zest meets dark, woody depth. A modern fragrance for those who dare to be different.",
-    fragranceFamily: "Fresh",
-    topNotes: ["Bergamot", "Grapefruit", "Lemon"],
-    middleNotes: ["Neroli", "Jasmine"],
-    baseNotes: ["Cedarwood", "Vetiver", "White Musk"],
-    reviews: [
-      { name: "Vikram S.", rating: 5, comment: "Fresh yet deep. Perfect for daily wear." },
-      { name: "Meera J.", rating: 4, comment: "Love the citrus opening. Great summer fragrance." },
-    ],
-  },
-  
-  {
-    id: "oud-sovereign",
-    name: "Oud Sovereign",
-    price: 499,
-    image: "/mockups/mock6.png",
-    description: "The crown jewel of our collection. Pure oud blended with royal saffron and precious woods. For those who demand the extraordinary.",
-    fragranceFamily: "Papa",
-    topNotes: ["Saffron", "Cinnamon"],
-    middleNotes: ["Oud", "Bulgarian Rose"],
-    baseNotes: ["Agarwood", "Leather", "Amber"],
-    reviews: [
-      { name: "Rahul T.", rating: 5, comment: "This is the best oud fragrance I've ever tried at any price point." },
-      { name: "Aisha N.", rating: 5, comment: "Royalty in a bottle. Worth every rupee." },
-    ],
-  },
-];
+// Fetch products from Supabase
+export async function getProducts(): Promise<Product[]> {
+  const dbProducts = await fetchProducts();
+  return dbProducts.map(mapProductFromDB);
+}
+
+// Fallback products array (kept for backwards compatibility during migration)
+export const products: Product[] = [];
 
 export const testimonials = [
   { name: "Arjun M.", rating: 5, comment: "NOVER NOIR redefined luxury for me. Incredible quality at an unbeatable price." },

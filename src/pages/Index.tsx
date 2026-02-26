@@ -1,10 +1,28 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { products, testimonials } from "@/data/products";
+import { getProducts, testimonials, Product } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 import { Star, Clock, Gem, Package } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const Index = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const data = await getProducts();
+        setProducts(data);
+      } catch (error) {
+        console.error('Error loading products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadProducts();
+  }, []);
+
   const featuredProducts = products.slice(0, 4);
 
   return (
@@ -62,9 +80,15 @@ const Index = () => {
             <h2 className="font-cinzel text-3xl md:text-5xl tracking-[0.1em]">Featured Perfumes</h2>
           </motion.div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {featuredProducts.map((product, i) => (
-              <ProductCard key={product.id} product={product} index={i} />
-            ))}
+            {loading ? (
+              <div className="col-span-full text-center py-12 text-muted-foreground">Loading products...</div>
+            ) : featuredProducts.length === 0 ? (
+              <div className="col-span-full text-center py-12 text-muted-foreground">No products found</div>
+            ) : (
+              featuredProducts.map((product, i) => (
+                <ProductCard key={product.id} product={product} index={i} />
+              ))
+            )}
           </div>
           <div className="text-center mt-16">
             <Link

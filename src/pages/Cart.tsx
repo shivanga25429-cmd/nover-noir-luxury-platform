@@ -1,7 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Minus, Plus, Trash, ArrowLeft } from "lucide-react";
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
+import { AuthDialog } from "@/components/AuthDialog";
+import { supabase } from "@/lib/supabase";
+import { useToast } from "@/hooks/use-toast";
 
 const TAX_RATE = 0.18; // 18% GST
 const SHIPPING_THRESHOLD = 2000; // free shipping over this amount
@@ -9,11 +13,114 @@ const SHIPPING_COST = 99;
 
 const Cart = () => {
   const { items, updateQuantity, removeFromCart, clearCart, totalPrice } = useCart();
+  const { user, userProfile, loading } = useAuth();
+  const [authDialogOpen, setAuthDialogOpen] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const { toast } = useToast();
+  const navigate = useNavigate();
 
   const subtotal = useMemo(() => totalPrice, [totalPrice]);
   const tax = useMemo(() => Number((subtotal * TAX_RATE).toFixed(2)), [subtotal]);
   const shipping = useMemo(() => (subtotal === 0 ? 0 : subtotal > SHIPPING_THRESHOLD ? 0 : SHIPPING_COST), [subtotal]);
   const total = useMemo(() => Number((subtotal + tax + shipping).toFixed(2)), [subtotal, tax, shipping]);
+
+  // Show auth dialog only after loading is complete and user is not authenticated
+  useEffect(() => {
+    if (!loading && !user) {
+      setAuthDialogOpen(true);
+    }
+  }, [user, loading]);
+
+  // Sync cart to Supabase when user is authenticated
+  useEffect(() => {
+    if (user && items.length > 0 && !isSyncing) {
+      syncCartToSupabase();
+    }
+  }, [user, items]);
+
+  const syncCartToSupabase = async () => {
+    if (!user || items.length === 0) return;
+
+    setIsSyncing(true);
+    try {
+      // Expand product IDs based on quantity
+      // If quantity is 2, add the product ID twice: ["id", "id"]
+      const productIds = items.flatMap((item) => 
+        Array(item.quantity).fill(item.product.id)
+      );
+      
+      // Check if user has an active cart
+      const { data: existingCarts } = await supabase
+        .from('cart')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('is_cleared', false)
+        .order('created_at', { ascending: false })
+        .limit(1);
+
+      if (existingCarts && existingCarts.length > 0) {
+        // Update existing cart
+        await supabase
+          .from('cart')
+          .update({
+            items: productIds,
+            total: total,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', existingCarts[0].id);
+      } else {
+        // Create new cart
+        await supabase.from('cart').insert({
+          user_id: user.id,
+          items: productIds,
+          total: total,
+          is_cleared: false,
+        });
+      }
+    } catch (error) {
+      console.error('Error syncing cart:', error);
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  const handleCheckout = async () => {
+    if (!user) {
+      setAuthDialogOpen(true);
+      return;
+    }
+
+    // Mark cart as purchased
+    try {
+      const { data: existingCarts } = await supabase
+        .from('cart')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('is_cleared', false)
+        .order('created_at', { ascending: false })
+        .limit(1);
+
+      if (existingCarts && existingCarts.length > 0) {
+        await supabase
+          .from('cart')
+          .update({ is_cleared: true })
+          .eq('id', existingCarts[0].id);
+
+        clearCart();
+        toast({
+          title: 'Order Placed!',
+          description: 'Your order has been placed successfully.',
+        });
+      }
+    } catch (error) {
+      console.error('Error during checkout:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to place order. Please try again.',
+        variant: 'destructive',
+      });
+    }
+  };
 
   return (
     <main className="pt-24 pb-20">
@@ -90,13 +197,33 @@ const Cart = () => {
                 </div>
               </div>
 
-              <button disabled className="mt-6 w-full bg-primary text-primary-foreground py-3 rounded-sm font-cinzel text-sm tracking-[0.15em]" title="Checkout not implemented">
+              <button disabled={!user} onClick={handleCheckout} className="mt-6 w-full bg-primary text-primary-foreground py-3 rounded-sm font-cinzel text-sm tracking-[0.15em] disabled:opacity-50" title={!user ? "Please sign in to checkout" : ""}>
                 Proceed to Checkout
               </button>
+              {!user && (
+                <p className="text-center text-xs text-muted-foreground mt-2">
+                  Please sign in to continue
+                </p>
+              )}
             </aside>
           </div>
         )}
       </div>
+
+      {/* Auth Dialog - Non-dismissable when user is not authenticated */}
+      <AuthDialog 
+        open={authDialogOpen} 
+        onOpenChange={(open) => {
+          // Only allow closing if user is authenticated
+          if (!open && !user) {
+            // Redirect to home if user tries to close without signing in
+            navigate('/');
+          } else {
+            setAuthDialogOpen(open);
+          }
+        }}
+        dismissable={false}
+      />
     </main>
   );
 };

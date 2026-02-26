@@ -1,13 +1,29 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { products } from "@/data/products";
+import { getProducts, Product } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 
 const fragranceFamilies = ["All", "Papa", "Floral", "Woody", "Fresh"];
 
 const Shop = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedFamily, setSelectedFamily] = useState("All");
   const [sortBy, setSortBy] = useState("default");
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const data = await getProducts();
+        setProducts(data);
+      } catch (error) {
+        console.error('Error loading products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadProducts();
+  }, []);
 
   let filtered = selectedFamily === "All" ? products : products.filter((p) => p.fragranceFamily === selectedFamily);
 
@@ -57,9 +73,15 @@ const Shop = () => {
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-          {filtered.map((product, i) => (
-            <ProductCard key={product.id} product={product} index={i} />
-          ))}
+          {loading ? (
+            <div className="col-span-full text-center py-12 text-muted-foreground">Loading products...</div>
+          ) : filtered.length === 0 ? (
+            <div className="col-span-full text-center py-12 text-muted-foreground">No products found</div>
+          ) : (
+            filtered.map((product, i) => (
+              <ProductCard key={product.id} product={product} index={i} />
+            ))
+          )}
         </div>
       </div>
     </main>

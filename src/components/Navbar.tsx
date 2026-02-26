@@ -1,12 +1,26 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { ShoppingBag, Menu, X } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { ShoppingBag, Menu, X, UserCircle } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
+import { AuthDialog } from "@/components/AuthDialog";
+import { UserDashboard } from "@/components/UserDashboard";
 
 const Navbar = () => {
   const { totalItems } = useCart();
+  const { user } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [authDialogOpen, setAuthDialogOpen] = useState(false);
+  const [dashboardOpen, setDashboardOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleCartClick = (e: React.MouseEvent) => {
+    if (!user) {
+      e.preventDefault();
+      setAuthDialogOpen(true);
+    }
+  };
 
   const links = [
     { to: "/", label: "Home" },
@@ -35,7 +49,19 @@ const Navbar = () => {
               {link.label}
             </Link>
           ))}
-          <Link to="/cart" className="relative group">
+          <button
+            onClick={() => {
+              if (user) {
+                setDashboardOpen(true);
+              } else {
+                setAuthDialogOpen(true);
+              }
+            }}
+            className="relative group"
+          >
+            <UserCircle className="w-5 h-5 text-foreground/70 group-hover:text-primary transition-colors" />
+          </button>
+          <Link to="/cart" onClick={handleCartClick} className="relative group">
             <ShoppingBag className="w-5 h-5 text-foreground/70 group-hover:text-primary transition-colors" />
             {totalItems > 0 && (
               <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
@@ -64,11 +90,37 @@ const Navbar = () => {
               {link.label}
             </Link>
           ))}
-          <Link to="/cart" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 text-sm text-foreground/70 hover:text-primary">
+          <button
+            onClick={() => {
+              setMobileOpen(false);
+              if (user) {
+                setDashboardOpen(true);
+              } else {
+                setAuthDialogOpen(true);
+              }
+            }}
+            className="flex items-center gap-2 text-sm text-foreground/70 hover:text-primary"
+          >
+            <UserCircle className="w-4 h-4" /> {user ? 'Dashboard' : 'Sign In'}
+          </button>
+          <Link 
+            to="/cart" 
+            onClick={(e) => {
+              setMobileOpen(false);
+              handleCartClick(e);
+            }} 
+            className="flex items-center gap-2 text-sm text-foreground/70 hover:text-primary"
+          >
             <ShoppingBag className="w-4 h-4" /> Cart ({totalItems})
           </Link>
         </div>
       )}
+
+      {/* Auth Dialog */}
+      <AuthDialog open={authDialogOpen} onOpenChange={setAuthDialogOpen} />
+      
+      {/* User Dashboard */}
+      <UserDashboard open={dashboardOpen} onOpenChange={setDashboardOpen} />
     </nav>
   );
 };

@@ -1,9 +1,9 @@
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { products } from "@/data/products";
+import { getProducts, Product } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import { toast } from "@/components/ui/sonner";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Minus, Plus } from "lucide-react";
 import { ShoppingBag, Star, ArrowLeft } from "lucide-react";
 
@@ -11,7 +11,31 @@ const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { addToCart } = useCart();
   const [qty, setQty] = useState<number>(1);
-  const product = products.find((p) => p.id === id);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadProduct = async () => {
+      try {
+        const data = await getProducts();
+        const found = data.find((p) => p.id === id);
+        setProduct(found || null);
+      } catch (error) {
+        console.error('Error loading product:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadProduct();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="pt-32 text-center">
+        <p className="text-muted-foreground">Loading...</p>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
