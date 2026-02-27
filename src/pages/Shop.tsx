@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { getProducts, Product } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 
-const fragranceFamilies = ["All", "Papa", "Floral", "Woody", "Fresh"];
+const fragranceFamilies = ["All", "Woody & Smoky", "Amber & Spiced", "Floral & Creamy"];
 
 const Shop = () => {
   const [products, setProducts] = useState<Product[]>([]);
