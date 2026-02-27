@@ -8,7 +8,7 @@ const Footer = () => {
           <div>
             <h3 className="font-cinzel text-xl tracking-[0.3em] text-primary mb-4">NOVER NOIR</h3>
             <p className="text-muted-foreground text-sm leading-relaxed font-cormorant text-lg">
-              Luxury in Every Drop. Premium fragrances crafted for those who appreciate the finer things.
+              Crafted Fragrance, Timeless Elegance. Premium scents designed for those who appreciate sophistication.
             </p>
           </div>
           <div>
@@ -37,9 +37,10 @@ const Footer = () => {
                 <a href="https://www.facebook.com/profile.php?id=61588661760494" className="hover:text-primary transition-colors" target="_blank" rel="noopener noreferrer">Facebook</a>
                 <a href="https://www.youtube.com/@NoverNoir" className="hover:text-primary transition-colors" target="_blank" rel="noopener noreferrer">YouTube</a>
               </div>
-              <div className="pt-4 flex flex-col sm:flex-row sm:justify-start sm:gap-4">
-                <a href="https://drive.google.com/file/d/1SsDSi-XcOL2DAgz_-39QZW-TCgsHhzcZ/view?usp=sharing" className="text-sm text-muted-foreground hover:text-primary transition-colors" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
-                <a href="https://drive.google.com/file/d/1vwMKByQqqM41prZOtPdN8gD0LZKjDvIR/view?usp=sharing" className="text-sm text-muted-foreground hover:text-primary transition-colors" target="_blank" rel="noopener noreferrer">Terms & Conditions</a>
+              <div className="pt-4 flex flex-col gap-2">
+                <Link to="/privacy-policy" className="text-sm text-muted-foreground hover:text-primary transition-colors">Privacy Policy</Link>
+                <Link to="/terms-conditions" className="text-sm text-muted-foreground hover:text-primary transition-colors">Terms & Conditions</Link>
+                <Link to="/return-refund-policy" className="text-sm text-muted-foreground hover:text-primary transition-colors">Return & Refund Policy</Link>
               </div>
             </div>
           </div>
