@@ -45,7 +45,7 @@ const Index = () => {
               NOVER NOIR
             </h1>
             <p className="font-cormorant text-2xl md:text-3xl text-foreground/70 italic mb-12">
-              Luxury in Every Drop.
+              Crafted fragrance. Commanding presence.
             </p>
             <Link
               to="/shop"
