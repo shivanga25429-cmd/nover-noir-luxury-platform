@@ -6,7 +6,6 @@ import { useAuth } from "@/context/AuthContext";
 import { AuthDialog } from "@/components/AuthDialog";
 import { supabase } from "@/lib/supabase";
 
-const TAX_RATE = 0.18; // 18% GST
 const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:3000';
 
 const Cart = () => {
@@ -32,17 +31,20 @@ const Cart = () => {
   }, []);
 
   const subtotal = useMemo(() => totalPrice, [totalPrice]);
-  const tax = useMemo(() => Number((subtotal * TAX_RATE).toFixed(2)), [subtotal]);
   const shipping = useMemo(
     () => (subtotal === 0 ? 0 : subtotal >= shippingThreshold ? 0 : shippingCost),
     [subtotal, shippingCost, shippingThreshold]
   );
-  const total = useMemo(() => Number((subtotal + tax + shipping).toFixed(2)), [subtotal, tax, shipping]);
+  const total = useMemo(() => Number((subtotal + shipping).toFixed(2)), [subtotal, shipping]);
 
   // Show auth dialog only after loading is complete and user is not authenticated
   useEffect(() => {
     if (!loading && !user) {
-      setAuthDialogOpen(true);
+      // Small delay to ensure auth state has fully settled after a page refresh
+      const timer = setTimeout(() => {
+        if (!user) setAuthDialogOpen(true);
+      }, 150);
+      return () => clearTimeout(timer);
     }
   }, [user, loading]);
 
@@ -168,10 +170,6 @@ const Cart = () => {
                 <div className="flex justify-between text-sm">
                   <span>Subtotal</span>
                   <span>₹{subtotal.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span>Tax (18%)</span>
-                  <span>₹{tax.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span>Shipping</span>

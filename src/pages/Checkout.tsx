@@ -479,8 +479,8 @@ export default function Checkout() {
             </button>
 
             <div className="mt-3 flex items-center justify-center gap-1 text-xs text-muted-foreground">
-              <img src="https://cdn.razorpay.com/static/assets/logo/badge.svg" alt="Razorpay" className="h-5" />
-              Secured by Razorpay
+              <span>🔒</span>
+              Secured Checkout
             </div>
           </aside>
         </div>

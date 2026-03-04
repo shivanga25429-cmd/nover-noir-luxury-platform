@@ -128,7 +128,7 @@ const Index = () => {
             >
               {[
                 { value: "30+", label: "Fragrances" },
-                { value: "12h+", label: "Longevity" },
+                { value: "6–8hr", label: "Longevity" },
                 { value: "₹200", label: "Starting at" },
               ].map((stat) => (
                 <div key={stat.label} className="text-left">
@@ -250,8 +250,8 @@ const Index = () => {
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {[
-              { icon: Clock, title: "Long Lasting", desc: "Our fragrances are crafted to endure. 12+ hours of captivating scent that evolves beautifully on your skin." },
-              { icon: Gem, title: "Affordable Luxury", desc: "Premium ingredients and expert blending at a fraction of international luxury brand prices. ₹200–₹1000." },
+              { icon: Clock, title: "Long Lasting", desc: "Our fragrances are crafted to endure. 6–8 hours of captivating scent that evolves beautifully on your skin." },
+              { icon: Gem, title: "Affordable Luxury", desc: "Premium ingredients and expert blending at a fraction of international luxury brand prices." },
               { icon: Package, title: "Premium Packaging", desc: "Every bottle is a statement piece. Elegant design and unboxing experience worthy of a luxury maison." },
             ].map((item, i) => (
               <motion.div

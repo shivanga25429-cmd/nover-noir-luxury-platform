@@ -21,18 +21,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchUserProfile(session.user.id);
-      } else {
-        setLoading(false);
-      }
-    });
+    let initialised = false;
 
-    // Listen for auth changes
+    // Listen for auth changes — this fires first with INITIAL_SESSION on page load
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -42,6 +33,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         fetchUserProfile(session.user.id);
       } else {
         setUserProfile(null);
+        setLoading(false);
+      }
+      initialised = true;
+    });
+
+    // Fallback: if onAuthStateChange doesn't fire quickly, resolve via getSession
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (initialised) return; // already handled by onAuthStateChange
+      setSession(session);
+      setUser(session?.user ?? null);
+      if (session?.user) {
+        fetchUserProfile(session.user.id);
+      } else {
         setLoading(false);
       }
     });
