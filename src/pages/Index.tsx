@@ -104,7 +104,7 @@ const Index = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.9 }}
-              className="flex items-center justify-center lg:justify-start gap-6 flex-wrap"
+              className="flex flex-row flex-wrap items-center justify-center gap-6 lg:flex-col lg:items-start lg:gap-4"
             >
               <Link
                 to="/shop"
