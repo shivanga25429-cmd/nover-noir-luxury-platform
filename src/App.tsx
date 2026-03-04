@@ -7,7 +7,6 @@ import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import FloatingCalculator from "@/components/FloatingCalculator";
 import Index from "./pages/Index";
 import Shop from "./pages/Shop";
 import ProductDetail from "./pages/ProductDetail";
@@ -49,7 +48,6 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
             <Footer />
-            <FloatingCalculator />
           </BrowserRouter>
         </CartProvider>
       </AuthProvider>

@@ -1,13 +1,17 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { getProducts, testimonials, Product } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
-import { Star, Clock, Gem, Package } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Star, Clock, Gem, Package, ArrowRight } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
 
 const Index = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
+  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -28,41 +32,172 @@ const Index = () => {
   return (
     <main>
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-secondary" />
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-primary/20 blur-[120px]" />
-          <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full bg-primary/10 blur-[100px]" />
+      <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden bg-background">
+
+        {/* Ambient background orbs */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] rounded-full bg-primary/5 blur-[160px]" />
+          <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-primary/8 blur-[140px]" />
         </div>
 
-        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-          >
-            <h1 className="font-cinzel text-6xl md:text-8xl lg:text-9xl font-medium tracking-[0.15em] text-gold-gradient mb-6">
-              NOVER NOIR
-            </h1>
-            <p className="font-cormorant text-2xl md:text-3xl text-foreground/70 italic mb-12">
-              Crafted fragrance. Commanding presence.
-            </p>
-            <Link
-              to="/shop"
-              className="inline-block bg-primary text-primary-foreground font-cinzel text-sm tracking-[0.2em] uppercase px-12 py-4 transition-all duration-500 hover:gold-glow gold-glow-hover hover:scale-105"
+        {/* Thin horizontal rule lines for luxury grid feel */}
+        <div className="absolute inset-0 pointer-events-none opacity-[0.04]"
+          style={{ backgroundImage: "repeating-linear-gradient(0deg, hsl(40 48% 56%), hsl(40 48% 56%) 1px, transparent 1px, transparent 120px)" }}
+        />
+
+        <div className="relative z-10 container mx-auto max-w-7xl px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center min-h-screen py-32">
+
+          {/* Left — Text Content */}
+          <motion.div style={{ y: textY }} className="flex flex-col justify-center">
+
+            {/* Eyebrow */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="flex items-center gap-3 mb-8"
             >
-              Shop Now
-            </Link>
+              <span className="block w-8 h-px bg-primary" />
+              <span className="font-cinzel text-primary text-[10px] tracking-[0.45em] uppercase">
+                Luxury Fragrance
+              </span>
+            </motion.div>
+
+            {/* Main title */}
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="font-cinzel text-[clamp(3.5rem,8vw,6.5rem)] font-medium leading-[0.95] tracking-[0.08em] mb-6"
+            >
+              <span className="text-gold-gradient block">NOVER</span>
+              <span className="text-foreground/90 block">NOIR</span>
+            </motion.h1>
+
+            {/* Ornament divider */}
+            <motion.div
+              initial={{ opacity: 0, scaleX: 0 }}
+              animate={{ opacity: 1, scaleX: 1 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="flex items-center gap-4 mb-8 origin-left"
+            >
+              <span className="block h-px flex-1 max-w-[80px] bg-gradient-to-r from-primary/80 to-transparent" />
+              <span className="text-primary text-base">✦</span>
+              <span className="block h-px w-4 bg-primary/40" />
+            </motion.div>
+
+            {/* Tagline */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.7 }}
+              className="font-cormorant text-xl md:text-2xl text-foreground/55 italic leading-relaxed mb-12 max-w-sm"
+            >
+              Crafted fragrance.<br />Commanding presence.
+            </motion.p>
+
+            {/* CTAs */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.9 }}
+              className="flex items-center gap-6 flex-wrap"
+            >
+              <Link
+                to="/shop"
+                className="group inline-flex items-center gap-3 bg-primary text-primary-foreground font-cinzel text-[11px] tracking-[0.25em] uppercase px-10 py-4 transition-all duration-500 gold-glow-hover hover:scale-[1.03]"
+              >
+                Explore Collection
+                <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+              </Link>
+              <Link
+                to="/about"
+                className="inline-flex items-center gap-2 font-cinzel text-[11px] tracking-[0.25em] uppercase text-foreground/50 hover:text-primary transition-colors duration-300"
+              >
+                Our Story
+                <span className="block w-5 h-px bg-current transition-all duration-300" />
+              </Link>
+            </motion.div>
+
+            {/* Stats row */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 1.2 }}
+              className="flex items-center gap-10 mt-16 pt-10 border-t border-border/40"
+            >
+              {[
+                { value: "30+", label: "Fragrances" },
+                { value: "12h+", label: "Longevity" },
+                { value: "₹200", label: "Starting at" },
+              ].map((stat) => (
+                <div key={stat.label} className="text-left">
+                  <p className="font-cinzel text-xl text-gold-gradient font-medium tracking-wide">{stat.value}</p>
+                  <p className="font-cormorant text-xs text-muted-foreground tracking-[0.2em] uppercase mt-0.5">{stat.label}</p>
+                </div>
+              ))}
+            </motion.div>
+          </motion.div>
+
+          {/* Right — Visual */}
+          <motion.div
+            style={{ y: imageY }}
+            initial={{ opacity: 0, scale: 0.92 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.2, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="relative flex items-center justify-center lg:justify-end"
+          >
+            {/* Glow ring behind bottle */}
+            <div className="absolute w-[340px] h-[340px] rounded-full border border-primary/10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+            <div className="absolute w-[420px] h-[420px] rounded-full border border-primary/5 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+            <div className="absolute w-[280px] h-[280px] rounded-full bg-primary/8 blur-[80px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+
+            {/* Main product image */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+              <img
+                src="/output.png"
+                alt="Nover Noir Signature Fragrance"
+                className="w-full h-[600px] object-contain drop-shadow-2xl shadow-white"
+              />
+            </div>
+
+            {/* Floating accent badge */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 1.0 }}
+              className="absolute top-12 right-0 lg:right-4 border border-primary/30 bg-background/80 backdrop-blur-sm px-5 py-3 text-left"
+            >
+              <p className="font-cinzel text-[9px] tracking-[0.35em] text-primary uppercase mb-0.5">Signature</p>
+              <p className="font-cormorant text-sm italic text-foreground/70">Noir Collection</p>
+            </motion.div>
+
+            {/* Floating scent note */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 1.15 }}
+              className="absolute bottom-16 left-0 lg:-left-4 border border-border/60 bg-background/80 backdrop-blur-sm px-5 py-3"
+            >
+              <p className="font-cinzel text-[9px] tracking-[0.35em] text-muted-foreground uppercase mb-1">Top Notes</p>
+              <p className="font-cormorant text-sm text-foreground/80">Oud · Amber · Musk</p>
+            </motion.div>
           </motion.div>
         </div>
 
+        {/* Scroll indicator */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 2, delay: 1 }}
-          className="absolute bottom-12 left-1/2 -translate-x-1/2"
+          transition={{ duration: 1.5, delay: 1.5 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         >
-          <div className="w-px h-16 bg-gradient-to-b from-transparent via-primary/50 to-transparent" />
+          <span className="font-cinzel text-[9px] tracking-[0.4em] text-muted-foreground uppercase">Scroll</span>
+          <motion.div
+            animate={{ y: [0, 6, 0] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            className="w-px h-10 bg-gradient-to-b from-primary/60 to-transparent"
+          />
         </motion.div>
       </section>
 
