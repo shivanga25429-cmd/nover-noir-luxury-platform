@@ -48,7 +48,7 @@ const Index = () => {
         <div className="relative z-10 container mx-auto max-w-7xl px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center min-h-screen py-32">
 
           {/* Left — Text Content */}
-          <motion.div style={{ y: textY }} className="flex flex-col justify-center">
+          <motion.div style={{ y: textY }} className="flex flex-col justify-center items-center text-center lg:items-start lg:text-left">
 
             {/* Eyebrow */}
             <motion.div
@@ -61,6 +61,7 @@ const Index = () => {
               <span className="font-cinzel text-primary text-[10px] tracking-[0.45em] uppercase">
                 Luxury Fragrance
               </span>
+              <span className="block w-8 h-px bg-primary lg:hidden" />
             </motion.div>
 
             {/* Main title */}
@@ -79,11 +80,13 @@ const Index = () => {
               initial={{ opacity: 0, scaleX: 0 }}
               animate={{ opacity: 1, scaleX: 1 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="flex items-center gap-4 mb-8 origin-left"
+              className="flex items-center gap-4 mb-8 origin-center lg:origin-left"
             >
-              <span className="block h-px flex-1 max-w-[80px] bg-gradient-to-r from-primary/80 to-transparent" />
+              {/* Left line: symmetric on mobile, fades right on desktop */}
+              <span className="block h-px flex-1 max-w-[80px] bg-gradient-to-l from-primary/80 to-transparent lg:bg-gradient-to-r lg:from-primary/80 lg:to-transparent" />
               <span className="text-primary text-base">✦</span>
-              <span className="block h-px w-4 bg-primary/40" />
+              {/* Right line: always visible, symmetric */}
+              <span className="block h-px flex-1 max-w-[80px] bg-gradient-to-r from-primary/80 to-transparent" />
             </motion.div>
 
             {/* Tagline */}
@@ -101,7 +104,7 @@ const Index = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.9 }}
-              className="flex items-center gap-6 flex-wrap"
+              className="flex items-center justify-center lg:justify-start gap-6 flex-wrap"
             >
               <Link
                 to="/shop"
@@ -114,6 +117,8 @@ const Index = () => {
                 to="/about"
                 className="inline-flex items-center gap-2 font-cinzel text-[11px] tracking-[0.25em] uppercase text-foreground/50 hover:text-primary transition-colors duration-300"
               >
+                {/* Left line — shown on mobile for symmetry, hidden on desktop */}
+                <span className="block w-5 h-px bg-current transition-all duration-300 lg:hidden" />
                 Our Story
                 <span className="block w-5 h-px bg-current transition-all duration-300" />
               </Link>
@@ -124,14 +129,14 @@ const Index = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1, delay: 1.2 }}
-              className="flex items-center gap-10 mt-16 pt-10 border-t border-border/40"
+              className="flex items-center justify-center lg:justify-start gap-10 mt-16 pt-10 border-t border-border/40 w-full"
             >
               {[
                 { value: "30+", label: "Fragrances" },
                 { value: "6–8hr", label: "Longevity" },
                 { value: "₹200", label: "Starting at" },
               ].map((stat) => (
-                <div key={stat.label} className="text-left">
+                <div key={stat.label} className="text-center lg:text-left">
                   <p className="font-cinzel text-xl text-gold-gradient font-medium tracking-wide">{stat.value}</p>
                   <p className="font-cormorant text-xs text-muted-foreground tracking-[0.2em] uppercase mt-0.5">{stat.label}</p>
                 </div>
@@ -161,23 +166,23 @@ const Index = () => {
               />
             </div>
 
-            {/* Floating accent badge */}
+            {/* Floating accent badge — hidden on mobile */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 1.0 }}
-              className="absolute top-12 right-0 lg:right-4 border border-primary/30 bg-background/80 backdrop-blur-sm px-5 py-3 text-left"
+              className="hidden sm:block absolute top-12 right-0 lg:right-4 border border-primary/30 bg-background/80 backdrop-blur-sm px-5 py-3 text-left"
             >
               <p className="font-cinzel text-[9px] tracking-[0.35em] text-primary uppercase mb-0.5">Signature</p>
               <p className="font-cormorant text-sm italic text-foreground/70">Noir Collection</p>
             </motion.div>
 
-            {/* Floating scent note */}
+            {/* Floating scent note — hidden on mobile */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 1.15 }}
-              className="absolute bottom-16 left-0 lg:-left-4 border border-border/60 bg-background/80 backdrop-blur-sm px-5 py-3"
+              className="hidden sm:block absolute bottom-16 left-0 lg:-left-4 border border-border/60 bg-background/80 backdrop-blur-sm px-5 py-3"
             >
               <p className="font-cinzel text-[9px] tracking-[0.35em] text-muted-foreground uppercase mb-1">Top Notes</p>
               <p className="font-cormorant text-sm text-foreground/80">Oud · Amber · Musk</p>
