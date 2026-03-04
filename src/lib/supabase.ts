@@ -36,12 +36,14 @@ export interface ProductDB {
   id: string;
   name: string;
   price: number;
+  original_price: number | null;
   image: string | null;
   description: string | null;
   fragrance_family: string | null;
   top_notes: string[];
   middle_notes: string[];
   base_notes: string[];
+  is_active?: boolean;
   created_at?: string;
   updated_at?: string;
 }

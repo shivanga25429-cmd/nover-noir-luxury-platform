@@ -10,6 +10,7 @@ export interface Product {
   id: string;
   name: string;
   price: number;
+  originalPrice: number | null;
   image: string;
   description: string;
   fragranceFamily: string;
@@ -52,6 +53,7 @@ function mapProductFromDB(dbProduct: ProductDB): Product {
     id: dbProduct.id,
     name: dbProduct.name,
     price: dbProduct.price,
+    originalPrice: dbProduct.original_price ?? null,
     image: dbProduct.image || '',
     description: dbProduct.description || '',
     fragranceFamily: dbProduct.fragrance_family || '',

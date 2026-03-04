@@ -7,19 +7,36 @@ import { AuthDialog } from "@/components/AuthDialog";
 import { supabase } from "@/lib/supabase";
 
 const TAX_RATE = 0.18; // 18% GST
-const SHIPPING_THRESHOLD = 2000; // free shipping over this amount
-const SHIPPING_COST = 99;
+const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:3000';
 
 const Cart = () => {
   const { items, updateQuantity, removeFromCart, clearCart, totalPrice } = useCart();
   const { user, loading } = useAuth();
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
+  const [shippingCost, setShippingCost] = useState(99);
+  const [shippingThreshold, setShippingThreshold] = useState(2000);
   const navigate = useNavigate();
+
+  // Fetch shipping config from API
+  useEffect(() => {
+    fetch(`${API_BASE}/api/settings/shipping`)
+      .then((r) => r.json())
+      .then((j) => {
+        if (j.success && j.data) {
+          setShippingCost(j.data.cost ?? 99);
+          setShippingThreshold(j.data.free_above ?? 2000);
+        }
+      })
+      .catch(() => {/* keep defaults */});
+  }, []);
 
   const subtotal = useMemo(() => totalPrice, [totalPrice]);
   const tax = useMemo(() => Number((subtotal * TAX_RATE).toFixed(2)), [subtotal]);
-  const shipping = useMemo(() => (subtotal === 0 ? 0 : subtotal > SHIPPING_THRESHOLD ? 0 : SHIPPING_COST), [subtotal]);
+  const shipping = useMemo(
+    () => (subtotal === 0 ? 0 : subtotal >= shippingThreshold ? 0 : shippingCost),
+    [subtotal, shippingCost, shippingThreshold]
+  );
   const total = useMemo(() => Number((subtotal + tax + shipping).toFixed(2)), [subtotal, tax, shipping]);
 
   // Show auth dialog only after loading is complete and user is not authenticated

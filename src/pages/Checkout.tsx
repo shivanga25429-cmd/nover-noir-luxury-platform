@@ -17,8 +17,6 @@ declare global {
 }
 
 const TAX_RATE = 0.18;
-const SHIPPING_THRESHOLD = 2000;
-const SHIPPING_COST = 99;
 
 // ─── Address Form ─────────────────────────────────────────────────────────────
 
@@ -140,11 +138,28 @@ export default function Checkout() {
   const [editingAddress, setEditingAddress] = useState<Address | null>(null);
   const [savingAddress, setSavingAddress] = useState(false);
   const [processingPayment, setProcessingPayment] = useState(false);
+  const [shippingCost, setShippingCost] = useState(99);
+  const [shippingThreshold, setShippingThreshold] = useState(2000);
+
+  const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:3000';
 
   const subtotal = totalPrice;
   const tax = parseFloat((subtotal * TAX_RATE).toFixed(2));
-  const shipping = subtotal === 0 ? 0 : subtotal > SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
+  const shipping = subtotal === 0 ? 0 : subtotal >= shippingThreshold ? 0 : shippingCost;
   const total = parseFloat((subtotal + tax + shipping).toFixed(2));
+
+  // Fetch dynamic shipping config
+  useEffect(() => {
+    fetch(`${API_BASE}/api/settings/shipping`)
+      .then((r) => r.json())
+      .then((j) => {
+        if (j.success && j.data) {
+          setShippingCost(j.data.cost ?? 99);
+          setShippingThreshold(j.data.free_above ?? 2000);
+        }
+      })
+      .catch(() => {/* keep defaults */});
+  }, [API_BASE]);
 
   useEffect(() => {
     if (!user) { setAuthOpen(true); return; }

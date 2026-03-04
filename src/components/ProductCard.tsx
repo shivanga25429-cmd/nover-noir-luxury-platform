@@ -36,7 +36,17 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
       </Link>
       <div className="space-y-2">
         <h3 className="font-cinzel text-sm tracking-[0.15em] uppercase">{product.name}</h3>
-        <p className="text-primary font-cinzel text-lg">₹{product.price}</p>
+        <div className="flex flex-wrap items-baseline gap-2">
+          <p className="text-primary font-cinzel text-lg">₹{product.price}</p>
+          {product.originalPrice && product.originalPrice > product.price && (
+            <>
+              <span className="text-muted-foreground text-sm line-through">₹{product.originalPrice}</span>
+              <span className="text-xs font-semibold text-green-600 bg-green-50 dark:bg-green-950 dark:text-green-400 px-1.5 py-0.5 rounded">
+                {Math.round((product.originalPrice - product.price) / product.originalPrice * 100)}% OFF
+              </span>
+            </>
+          )}
+        </div>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setQty((q) => Math.max(1, q - 1))}

@@ -73,7 +73,17 @@ const ProductDetail = () => {
           >
             <p className="text-primary text-xs tracking-[0.4em] uppercase mb-3 font-cinzel">{product.fragranceFamily}</p>
             <h1 className="font-cinzel text-4xl md:text-5xl tracking-[0.1em] mb-4">{product.name}</h1>
-            <p className="font-cinzel text-3xl text-primary mb-6">₹{product.price}</p>
+            <div className="flex flex-wrap items-baseline gap-3 mb-6">
+              <p className="font-cinzel text-3xl text-primary">₹{product.price}</p>
+              {product.originalPrice && product.originalPrice > product.price && (
+                <>
+                  <span className="text-muted-foreground text-xl line-through">₹{product.originalPrice}</span>
+                  <span className="text-sm font-semibold text-green-600 bg-green-50 dark:bg-green-950 dark:text-green-400 px-2 py-0.5 rounded">
+                    {Math.round((product.originalPrice - product.price) / product.originalPrice * 100)}% OFF
+                  </span>
+                </>
+              )}
+            </div>
             <p className="text-muted-foreground leading-relaxed mb-10">{product.description}</p>
 
             {/* Fragrance Notes */}
