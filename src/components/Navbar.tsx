@@ -27,6 +27,7 @@ const Navbar = () => {
     { to: "/shop", label: "Shop" },
     { to: "/about", label: "About" },
     { to: "/contact", label: "Contact" },
+    ...(user ? [{ to: "/orders", label: "My Orders" }] : []),
   ];
 
   return (

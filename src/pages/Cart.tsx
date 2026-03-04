@@ -5,7 +5,6 @@ import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { AuthDialog } from "@/components/AuthDialog";
 import { supabase } from "@/lib/supabase";
-import { useToast } from "@/hooks/use-toast";
 
 const TAX_RATE = 0.18; // 18% GST
 const SHIPPING_THRESHOLD = 2000; // free shipping over this amount
@@ -13,10 +12,9 @@ const SHIPPING_COST = 99;
 
 const Cart = () => {
   const { items, updateQuantity, removeFromCart, clearCart, totalPrice } = useCart();
-  const { user, userProfile, loading } = useAuth();
+  const { user, loading } = useAuth();
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
-  const { toast } = useToast();
   const navigate = useNavigate();
 
   const subtotal = useMemo(() => totalPrice, [totalPrice]);
@@ -89,37 +87,8 @@ const Cart = () => {
       setAuthDialogOpen(true);
       return;
     }
-
-    // Mark cart as purchased
-    try {
-      const { data: existingCarts } = await supabase
-        .from('cart')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('is_cleared', false)
-        .order('created_at', { ascending: false })
-        .limit(1);
-
-      if (existingCarts && existingCarts.length > 0) {
-        await supabase
-          .from('cart')
-          .update({ is_cleared: true })
-          .eq('id', existingCarts[0].id);
-
-        clearCart();
-        toast({
-          title: 'Order Placed!',
-          description: 'Your order has been placed successfully.',
-        });
-      }
-    } catch (error) {
-      console.error('Error during checkout:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to place order. Please try again.',
-        variant: 'destructive',
-      });
-    }
+    // Navigate to dedicated checkout page with address selection + Razorpay
+    navigate('/checkout');
   };
 
   return (
