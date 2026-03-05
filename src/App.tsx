@@ -20,6 +20,7 @@ import ReturnRefundPolicy from "./pages/ReturnRefundPolicy";
 import Checkout from "./pages/Checkout";
 import Orders from "./pages/Orders";
 import OrderDetail from "./pages/OrderDetail";
+import EmailVerify from "./pages/EmailVerify";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +46,7 @@ const App = () => (
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/orders" element={<Orders />} />
               <Route path="/orders/:id" element={<OrderDetail />} />
+              <Route path="/auth/verify" element={<EmailVerify />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <Footer />
