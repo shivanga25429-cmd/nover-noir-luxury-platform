@@ -184,9 +184,6 @@ export default function OrderDetail() {
               <span>Subtotal</span><span>₹{order.subtotal.toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-sm text-muted-foreground">
-              <span>Tax (18% GST)</span><span>₹{order.tax.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between text-sm text-muted-foreground">
               <span>Shipping</span><span>{order.shipping === 0 ? "Free" : `₹${order.shipping.toFixed(2)}`}</span>
             </div>
             <div className="flex justify-between font-cinzel text-base pt-2 border-t border-border">

@@ -16,8 +16,6 @@ declare global {
   }
 }
 
-const TAX_RATE = 0.18;
-
 // ─── Address Form ─────────────────────────────────────────────────────────────
 
 interface AddressFormProps {
@@ -144,9 +142,9 @@ export default function Checkout() {
   const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:3000';
 
   const subtotal = totalPrice;
-  const tax = parseFloat((subtotal * TAX_RATE).toFixed(2));
+  const tax = 0;
   const shipping = subtotal === 0 ? 0 : subtotal >= shippingThreshold ? 0 : shippingCost;
-  const total = parseFloat((subtotal + tax + shipping).toFixed(2));
+  const total = parseFloat((subtotal + shipping).toFixed(2));
 
   // Fetch dynamic shipping config
   useEffect(() => {
@@ -445,10 +443,6 @@ export default function Checkout() {
               <div className="flex justify-between text-sm">
                 <span>Subtotal</span>
                 <span>₹{subtotal.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span>Tax (18% GST)</span>
-                <span>₹{tax.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span>Shipping</span>
