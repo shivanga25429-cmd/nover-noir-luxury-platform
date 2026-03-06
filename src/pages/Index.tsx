@@ -132,7 +132,7 @@ const Index = () => {
               className="flex items-center justify-center lg:justify-start gap-10 mt-16 pt-10 border-t border-border/40 w-full"
             >
               {[
-                { value: "30+", label: "Fragrances" },
+                
                 { value: "6–8hr", label: "Longevity" },
                 { value: "₹200", label: "Starting at" },
               ].map((stat) => (

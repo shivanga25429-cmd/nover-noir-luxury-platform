@@ -73,6 +73,19 @@ const ProductDetail = () => {
           >
             <p className="text-primary text-xs tracking-[0.4em] uppercase mb-3 font-cinzel">{product.fragranceFamily}</p>
             <h1 className="font-cinzel text-4xl md:text-5xl tracking-[0.1em] mb-4">{product.name}</h1>
+
+            {/* Inline badges */}
+            <div className="flex items-center gap-2 mb-5">
+              {product.price === 479 && (
+                <span className="font-cinzel text-[9px] tracking-[0.3em] uppercase bg-primary text-primary-foreground px-3 py-1">
+                  Attar
+                </span>
+              )}
+              <span className="font-cinzel text-[9px] tracking-[0.3em] uppercase border border-primary/40 text-primary px-3 py-1">
+                Unisex
+              </span>
+            </div>
+
             <div className="flex flex-wrap items-baseline gap-3 mb-6">
               <p className="font-cinzel text-3xl text-primary">₹{product.price}</p>
               {product.originalPrice && product.originalPrice > product.price && (
@@ -84,7 +97,10 @@ const ProductDetail = () => {
                 </>
               )}
             </div>
-            <p className="text-muted-foreground leading-relaxed mb-10">{product.description}</p>
+            <p className="text-muted-foreground leading-relaxed mb-3">{product.description}</p>
+            <p className="font-cormorant italic text-sm text-primary/80 mb-10">
+              ✦ This fragrance is crafted for everyone — a truly unisex scent.
+            </p>
 
             {/* Fragrance Notes */}
             <div className="space-y-6 mb-10">

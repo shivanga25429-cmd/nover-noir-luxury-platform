@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useCart } from "@/context/CartContext";
 import { toast } from "@/components/ui/sonner";
 import { Product } from "@/data/products";
-import { ShoppingBag, Minus, Plus } from "lucide-react";
+import { ShoppingBag, Minus, Plus, ChevronRight } from "lucide-react";
 
 interface ProductCardProps {
   product: Product;
@@ -32,6 +32,18 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
             loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+          {/* Badges */}
+          <div className="absolute top-3 left-3 flex flex-col gap-1.5">
+            {product.price === 479 && (
+              <span className="font-cinzel text-[9px] tracking-[0.25em] uppercase bg-primary text-primary-foreground px-2.5 py-1">
+                Attar
+              </span>
+            )}
+            <span className="font-cinzel text-[9px] tracking-[0.25em] uppercase bg-background/80 backdrop-blur-sm text-foreground/80 border border-border/60 px-2.5 py-1">
+              Unisex
+            </span>
+          </div>
         </div>
       </Link>
       <div className="space-y-2">
@@ -47,6 +59,15 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
             </>
           )}
         </div>
+
+        {/* See more description prompt */}
+        <Link
+          to={`/product/${product.id}`}
+          className="inline-flex items-center gap-1 font-cormorant italic text-xs text-muted-foreground hover:text-primary transition-colors duration-300"
+        >
+          See full description
+          <ChevronRight className="w-3 h-3" />
+        </Link>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setQty((q) => Math.max(1, q - 1))}
