@@ -13,7 +13,7 @@ const Cart = () => {
   const { user, loading } = useAuth();
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
-  const [shippingCost, setShippingCost] = useState(99);
+  const [shippingCost, setShippingCost] = useState(49);
   const [shippingThreshold, setShippingThreshold] = useState(2000);
   const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ const Cart = () => {
       .then((r) => r.json())
       .then((j) => {
         if (j.success && j.data) {
-          setShippingCost(j.data.cost ?? 99);
+          setShippingCost(j.data.cost ?? 49);
           setShippingThreshold(j.data.free_above ?? 2000);
         }
       })
@@ -32,7 +32,8 @@ const Cart = () => {
 
   const subtotal = useMemo(() => totalPrice, [totalPrice]);
   const shipping = useMemo(
-    () => (subtotal === 0 ? 0 : subtotal >= shippingThreshold ? 0 : shippingCost),
+    // Mirror server logic exactly: free if subtotal > threshold (strictly greater than)
+    () => (subtotal === 0 ? 0 : subtotal > shippingThreshold ? 0 : shippingCost),
     [subtotal, shippingCost, shippingThreshold]
   );
   const total = useMemo(() => Number((subtotal + shipping).toFixed(2)), [subtotal, shipping]);

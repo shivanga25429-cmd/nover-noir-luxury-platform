@@ -136,14 +136,16 @@ export default function Checkout() {
   const [editingAddress, setEditingAddress] = useState<Address | null>(null);
   const [savingAddress, setSavingAddress] = useState(false);
   const [processingPayment, setProcessingPayment] = useState(false);
-  const [shippingCost, setShippingCost] = useState(99);
+  const [shippingCost, setShippingCost] = useState(49);
   const [shippingThreshold, setShippingThreshold] = useState(2000);
+  const [shippingLoaded, setShippingLoaded] = useState(false);
 
   const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:3000';
 
   const subtotal = totalPrice;
   const tax = 0;
-  const shipping = subtotal === 0 ? 0 : subtotal >= shippingThreshold ? 0 : shippingCost;
+  // Mirror server logic exactly: free if subtotal > threshold (strictly greater than)
+  const shipping = subtotal === 0 ? 0 : subtotal > shippingThreshold ? 0 : shippingCost;
   const total = parseFloat((subtotal + shipping).toFixed(2));
 
   // Fetch dynamic shipping config
@@ -152,11 +154,12 @@ export default function Checkout() {
       .then((r) => r.json())
       .then((j) => {
         if (j.success && j.data) {
-          setShippingCost(j.data.cost ?? 99);
+          setShippingCost(j.data.cost ?? 49);
           setShippingThreshold(j.data.free_above ?? 2000);
         }
       })
-      .catch(() => {/* keep defaults */});
+      .catch(() => {/* keep defaults */})
+      .finally(() => setShippingLoaded(true));
   }, [API_BASE]);
 
   useEffect(() => {
@@ -446,11 +449,17 @@ export default function Checkout() {
               </div>
               <div className="flex justify-between text-sm">
                 <span>Shipping</span>
-                <span>{shipping === 0 ? "Free" : `₹${shipping.toFixed(2)}`}</span>
+                {shippingLoaded
+                  ? <span>{shipping === 0 ? "Free" : `₹${shipping.toFixed(2)}`}</span>
+                  : <span className="text-muted-foreground animate-pulse">Calculating…</span>
+                }
               </div>
               <div className="border-t border-border pt-3 flex justify-between font-cinzel text-lg">
                 <span>Total</span>
-                <span>₹{total.toFixed(2)}</span>
+                {shippingLoaded
+                  ? <span>₹{total.toFixed(2)}</span>
+                  : <span className="text-muted-foreground animate-pulse">—</span>
+                }
               </div>
             </div>
 
