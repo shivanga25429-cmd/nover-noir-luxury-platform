@@ -35,7 +35,7 @@ function AddressForm({ initial, onSave, onCancel, saving }: AddressFormProps) {
     city: initial?.city ?? "",
     state: initial?.state ?? "",
     pincode: initial?.pincode ?? "",
-    country: initial?.country ?? "India",
+    country: initial?.country ?? "",
     is_default: initial?.is_default ?? false,
   });
 
@@ -66,42 +66,42 @@ function AddressForm({ initial, onSave, onCancel, saving }: AddressFormProps) {
 
       <div className="col-span-2">
         <label className="block text-xs text-muted-foreground mb-1">Full Name *</label>
-        <input required value={form.full_name} onChange={set("full_name")} className="w-full px-3 py-2 border border-border rounded-sm text-sm bg-background" placeholder="Arjun Sharma" />
+        <input required value={form.full_name} onChange={set("full_name")} className="w-full px-3 py-2 border border-border rounded-sm text-sm bg-background" placeholder="Enter your full name" />
       </div>
 
       <div className="col-span-2 sm:col-span-1">
         <label className="block text-xs text-muted-foreground mb-1">Phone *</label>
-        <input required value={form.phone} onChange={set("phone")} className="w-full px-3 py-2 border border-border rounded-sm text-sm bg-background" placeholder="+91 9876543210" />
+        <input required value={form.phone} onChange={set("phone")} className="w-full px-3 py-2 border border-border rounded-sm text-sm bg-background" placeholder="Enter your phone number" />
       </div>
 
       <div className="col-span-2">
         <label className="block text-xs text-muted-foreground mb-1">Address Line 1 *</label>
-        <input required value={form.address_line1} onChange={set("address_line1")} className="w-full px-3 py-2 border border-border rounded-sm text-sm bg-background" placeholder="Flat / House No, Building, Street" />
+        <input required value={form.address_line1} onChange={set("address_line1")} className="w-full px-3 py-2 border border-border rounded-sm text-sm bg-background" placeholder="Enter flat / house no, building, street" />
       </div>
 
       <div className="col-span-2">
         <label className="block text-xs text-muted-foreground mb-1">Address Line 2</label>
-        <input value={form.address_line2} onChange={set("address_line2")} className="w-full px-3 py-2 border border-border rounded-sm text-sm bg-background" placeholder="Area, Landmark (optional)" />
+        <input value={form.address_line2} onChange={set("address_line2")} className="w-full px-3 py-2 border border-border rounded-sm text-sm bg-background" placeholder="Enter area, landmark (optional)" />
       </div>
 
       <div>
         <label className="block text-xs text-muted-foreground mb-1">City *</label>
-        <input required value={form.city} onChange={set("city")} className="w-full px-3 py-2 border border-border rounded-sm text-sm bg-background" placeholder="Mumbai" />
+        <input required value={form.city} onChange={set("city")} className="w-full px-3 py-2 border border-border rounded-sm text-sm bg-background" placeholder="Enter your city" />
       </div>
 
       <div>
         <label className="block text-xs text-muted-foreground mb-1">State *</label>
-        <input required value={form.state} onChange={set("state")} className="w-full px-3 py-2 border border-border rounded-sm text-sm bg-background" placeholder="Maharashtra" />
+        <input required value={form.state} onChange={set("state")} className="w-full px-3 py-2 border border-border rounded-sm text-sm bg-background" placeholder="Enter your state" />
       </div>
 
       <div>
         <label className="block text-xs text-muted-foreground mb-1">Pincode *</label>
-        <input required value={form.pincode} onChange={set("pincode")} className="w-full px-3 py-2 border border-border rounded-sm text-sm bg-background" placeholder="400001" maxLength={6} />
+        <input required value={form.pincode} onChange={set("pincode")} className="w-full px-3 py-2 border border-border rounded-sm text-sm bg-background" placeholder="Enter your pincode" maxLength={6} />
       </div>
 
       <div>
         <label className="block text-xs text-muted-foreground mb-1">Country</label>
-        <input value={form.country} onChange={set("country")} className="w-full px-3 py-2 border border-border rounded-sm text-sm bg-background" />
+        <input value={form.country} onChange={set("country")} className="w-full px-3 py-2 border border-border rounded-sm text-sm bg-background" placeholder="Enter your country" />
       </div>
 
       <div className="col-span-2 flex items-center gap-2">
@@ -267,6 +267,12 @@ export default function Checkout() {
           order_id: paymentData.razorpay_order_id,
           prefill: paymentData.prefill,
           theme: { color: "#000000" },
+          config: {
+            display: {
+              hide: [{ method: "paylater" }],
+              preferences: { show_default_blocks: true },
+            },
+          },
           handler: async (response: unknown) => {
             try {
               const r = response as {
