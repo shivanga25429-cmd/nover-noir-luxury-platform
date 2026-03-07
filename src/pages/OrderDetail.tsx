@@ -8,13 +8,26 @@ import { Package, ArrowLeft, MapPin, CheckCircle2, Circle, Clock } from "lucide-
 const STATUS_COLORS: Record<string, string> = {
   pending_payment: "text-yellow-600",
   payment_failed: "text-red-500",
-  confirmed: "text-blue-600",
+  confirmed: "text-green-600",
   processing: "text-purple-600",
   shipped: "text-indigo-600",
   out_for_delivery: "text-orange-600",
   delivered: "text-green-600",
   cancelled: "text-gray-500",
   refunded: "text-gray-500",
+};
+
+// Human-readable overrides for status badge
+const STATUS_DISPLAY: Record<string, string> = {
+  pending_payment: "Payment Pending",
+  payment_failed: "Payment Failed",
+  confirmed: "Payment Received",
+  processing: "Processing",
+  shipped: "Shipped",
+  out_for_delivery: "Out for Delivery",
+  delivered: "Delivered",
+  cancelled: "Cancelled",
+  refunded: "Refunded",
 };
 
 export default function OrderDetail() {
@@ -113,8 +126,8 @@ export default function OrderDetail() {
               </p>
             )}
           </div>
-          <span className={`text-sm font-medium px-3 py-1 rounded-full border ${STATUS_COLORS[order.status]}`}>
-            {order.status.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}
+          <span className={`text-sm font-medium px-3 py-1 rounded-full border ${STATUS_COLORS[order.status] ?? "text-muted-foreground"}`}>
+            {STATUS_DISPLAY[order.status] ?? order.status.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}
           </span>
         </div>
 

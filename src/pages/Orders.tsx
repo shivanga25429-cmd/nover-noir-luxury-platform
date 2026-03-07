@@ -8,7 +8,7 @@ import { AuthDialog } from "@/components/AuthDialog";
 const STATUS_COLORS: Record<string, string> = {
   pending_payment: "text-yellow-600 bg-yellow-50",
   payment_failed: "text-red-600 bg-red-50",
-  confirmed: "text-blue-600 bg-blue-50",
+  confirmed: "text-green-600 bg-green-50",
   processing: "text-purple-600 bg-purple-50",
   shipped: "text-indigo-600 bg-indigo-50",
   out_for_delivery: "text-orange-600 bg-orange-50",
@@ -20,7 +20,7 @@ const STATUS_COLORS: Record<string, string> = {
 const STATUS_LABELS: Record<string, string> = {
   pending_payment: "Payment Pending",
   payment_failed: "Payment Failed",
-  confirmed: "Confirmed",
+  confirmed: "Payment Received",
   processing: "Processing",
   shipped: "Shipped",
   out_for_delivery: "Out for Delivery",
