@@ -146,9 +146,9 @@ export default function OrderDetail() {
                     <li key={step.status} className="flex items-start gap-4 relative">
                       <div className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                         step.active
-                          ? "bg-primary text-primary-foreground"
+                          ? "bg-green-500/20 text-green-500"
                           : step.completed
-                          ? "bg-primary/20 text-primary"
+                          ? "bg-green-500/20 text-green-500"
                           : "bg-muted text-muted-foreground"
                       }`}>
                         {step.active ? (
