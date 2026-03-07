@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { apiClient } from "@/lib/api";
 import type { Order, TrackingTimeline } from "@/lib/api";
-import { Package, ArrowLeft, MapPin, CheckCircle2, Circle, Clock } from "lucide-react";
+import { Package, ArrowLeft, MapPin, CheckCircle2, Circle } from "lucide-react";
 
 const STATUS_COLORS: Record<string, string> = {
   pending_payment: "text-yellow-600",
@@ -152,7 +152,7 @@ export default function OrderDetail() {
                           : "bg-muted text-muted-foreground"
                       }`}>
                         {step.active ? (
-                          <Clock className="w-4 h-4" />
+                          <CheckCircle2 className="w-4 h-4" />
                         ) : step.completed ? (
                           <CheckCircle2 className="w-4 h-4" />
                         ) : (
