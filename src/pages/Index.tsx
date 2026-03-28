@@ -132,9 +132,8 @@ const Index = () => {
               className="flex items-center justify-center lg:justify-start gap-10 mt-16 pt-10 border-t border-border/40 w-full"
             >
               {[
-                
                 { value: "6–8hr", label: "Longevity" },
-                { value: "₹200", label: "Starting at" },
+                { value: "9+", label: "Variants" },
               ].map((stat) => (
                 <div key={stat.label} className="text-center lg:text-left">
                   <p className="font-cinzel text-xl text-gold-gradient font-medium tracking-wide">{stat.value}</p>
