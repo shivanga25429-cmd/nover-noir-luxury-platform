@@ -3,15 +3,45 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { getProducts, testimonials, Product } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 import { Star, Clock, Gem, Package, ArrowRight } from "lucide-react";
-import { useEffect, useState, useRef } from "react";
+import { PropsWithChildren, useEffect, useState, useRef } from "react";
+
+const heroSlides = [
+  {
+    image: "/hero/1.png",
+  },
+  {
+    image: "/hero/2.png",
+  },
+  {
+    image: "/hero/3.png",
+  },
+];
+
+const ParallaxSection = ({
+  className,
+  children,
+}: PropsWithChildren<{ className?: string }>) => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], ["48px", "-48px"]);
+
+  return (
+    <section ref={sectionRef} className={className}>
+      <motion.div style={{ y }}>{children}</motion.div>
+    </section>
+  );
+};
 
 const Index = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeSlide, setActiveSlide] = useState(0);
   const heroRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
-  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
+  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -27,165 +57,92 @@ const Index = () => {
     loadProducts();
   }, []);
 
-  const featuredProducts = products.slice(0, 4);
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setActiveSlide((current) => (current + 1) % heroSlides.length);
+    }, 5000);
 
+    return () => window.clearInterval(interval);
+  }, []);
+
+  const featuredProducts = products.slice(0, 4);
   return (
     <main>
       {/* Hero Section */}
       <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden bg-background">
-
-        {/* Ambient background orbs */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] rounded-full bg-primary/5 blur-[160px]" />
-          <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-primary/8 blur-[140px]" />
+        <div className="absolute inset-0">
+          {heroSlides.map((slide, index) => (
+            <motion.div
+              key={slide.image}
+              initial={false}
+              animate={{
+                opacity: index === activeSlide ? 1 : 0,
+              }}
+              transition={{ duration: 1.2, ease: "easeInOut" }}
+              className="absolute inset-0"
+            >
+              <img
+                src={slide.image}
+                // alt={slide.title}
+                className="h-full w-full object-cover"
+              />
+            </motion.div>
+          ))}
         </div>
 
-        {/* Thin horizontal rule lines for luxury grid feel */}
-        <div className="absolute inset-0 pointer-events-none opacity-[0.04]"
-          style={{ backgroundImage: "repeating-linear-gradient(0deg, hsl(40 48% 56%), hsl(40 48% 56%) 1px, transparent 1px, transparent 120px)" }}
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(4,14,11,0.88)_0%,rgba(4,14,11,0.62)_42%,rgba(4,14,11,0.36)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(212,175,55,0.18),transparent_30%),linear-gradient(to_top,rgba(4,14,11,0.78),rgba(4,14,11,0.1))]" />
+
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.08]"
+          style={{ backgroundImage: "repeating-linear-gradient(0deg, hsl(40 48% 56% / 0.35), hsl(40 48% 56% / 0.35) 1px, transparent 1px, transparent 120px)" }}
         />
 
-        <div className="relative z-10 container mx-auto max-w-7xl px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center min-h-screen py-32">
-
-          {/* Left — Text Content */}
-          <motion.div style={{ y: textY }} className="flex flex-col justify-center items-center text-center lg:items-start lg:text-left">
-
-            {/* Eyebrow */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="flex items-center gap-3 mb-8"
-            >
-              <span className="block w-8 h-px bg-primary" />
-              <span className="font-cinzel text-primary text-[10px] tracking-[0.45em] uppercase">
-                Luxury Fragrance
-              </span>
-              <span className="block w-8 h-px bg-primary lg:hidden" />
-            </motion.div>
-
-            {/* Main title */}
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="font-cinzel text-[clamp(3.5rem,8vw,6.5rem)] font-medium leading-[0.95] tracking-[0.08em] mb-6"
-            >
-              <span className="text-gold-gradient block">NOVER</span>
-              <span className="text-foreground/90 block">NOIR</span>
-            </motion.h1>
-
-            {/* Ornament divider */}
-            <motion.div
-              initial={{ opacity: 0, scaleX: 0 }}
-              animate={{ opacity: 1, scaleX: 1 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="flex items-center gap-4 mb-8 origin-center lg:origin-left"
-            >
-              {/* Left line: symmetric on mobile, fades right on desktop */}
-              <span className="block h-px flex-1 max-w-[80px] bg-gradient-to-l from-primary/80 to-transparent lg:bg-gradient-to-r lg:from-primary/80 lg:to-transparent" />
-              <span className="text-primary text-base">✦</span>
-              {/* Right line: always visible, symmetric */}
-              <span className="block h-px flex-1 max-w-[80px] bg-gradient-to-r from-primary/80 to-transparent" />
-            </motion.div>
-
-            {/* Tagline */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.7 }}
-              className="font-cormorant text-xl md:text-2xl text-foreground/55 italic leading-relaxed mb-12 max-w-sm"
-            >
-              Crafted fragrance.<br />Commanding presence.
-            </motion.p>
-
-            {/* CTAs */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.9 }}
-              className="flex flex-row flex-wrap items-center justify-center gap-6 lg:flex-col lg:items-start lg:gap-4"
-            >
-              <Link
-                to="/shop"
-                className="group inline-flex items-center gap-3 bg-primary text-primary-foreground font-cinzel text-[11px] tracking-[0.25em] uppercase px-10 py-4 transition-all duration-500 gold-glow-hover hover:scale-[1.03]"
-              >
-                Explore Collection
-                <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
-              </Link>
-              <Link
-                to="/about"
-                className="inline-flex items-center gap-2 font-cinzel text-[11px] tracking-[0.25em] uppercase text-foreground/50 hover:text-primary transition-colors duration-300"
-              >
-                {/* Left line — shown on mobile for symmetry, hidden on desktop */}
-                <span className="block w-5 h-px bg-current transition-all duration-300 lg:hidden" />
-                Our Story
-                <span className="block w-5 h-px bg-current transition-all duration-300" />
-              </Link>
-            </motion.div>
-
-            {/* Stats row */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 1.2 }}
-              className="flex items-center justify-center lg:justify-start gap-10 mt-16 pt-10 border-t border-border/40 w-full"
-            >
-              {[
-                { value: "6–8hr", label: "Longevity" },
-                { value: "9+", label: "Variants" },
-              ].map((stat) => (
-                <div key={stat.label} className="text-center lg:text-left">
-                  <p className="font-cinzel text-xl text-gold-gradient font-medium tracking-wide">{stat.value}</p>
-                  <p className="font-cormorant text-xs text-muted-foreground tracking-[0.2em] uppercase mt-0.5">{stat.label}</p>
-                </div>
-              ))}
-            </motion.div>
-          </motion.div>
-
-          {/* Right — Visual */}
+        <div className="relative z-10 container mx-auto flex min-h-screen max-w-7xl items-end px-6 py-20 md:items-center md:py-28">
           <motion.div
-            style={{ y: imageY }}
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="relative flex items-center justify-center lg:justify-end"
+            style={{ y: textY }}
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="w-full max-w-3xl"
           >
-            {/* Glow ring behind bottle */}
-            <div className="absolute w-[340px] h-[340px] rounded-full border border-primary/10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
-            <div className="absolute w-[420px] h-[420px] rounded-full border border-primary/5 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
-            <div className="absolute w-[280px] h-[280px] rounded-full bg-primary/8 blur-[80px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+            <div className="max-w-3xl">
+              <div className="mb-6 flex items-center gap-3">
+                <span className="block h-px w-10 bg-primary" />
+                <span className="font-cinzel text-[10px] uppercase tracking-[0.45em] text-primary">
+                  Luxury Fragrance
+                </span>
+              </div>
 
-            {/* Main product image */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-              <img
-                src="/output.png"
-                alt="Nover Noir Signature Fragrance"
-                className="w-full h-[600px] object-contain drop-shadow-2xl shadow-white"
-              />
+              <h1 className="font-cinzel text-[clamp(3.2rem,9vw,7.5rem)] font-medium leading-[0.9] tracking-[0.08em] text-white">
+                <span className="text-gold-gradient block">NOVER</span>
+                <span className="block">NOIR</span>
+              </h1>
+
+              <p className="mt-6 max-w-xl font-cormorant text-2xl italic leading-relaxed text-white/80 md:text-3xl">
+                Command the room before you say a word.
+              </p>
+
+              <p className="mt-5 max-w-2xl text-sm leading-7 tracking-[0.08em] text-white/70 md:text-base">
+                Layered oud, amber, and musk in a sharper, more cinematic hero moment with premium blends built for presence and longevity.
+              </p>
+
+              <div className="mt-10 flex flex-wrap items-center gap-4">
+                <Link
+                  to="/shop"
+                  className="group inline-flex items-center gap-3 border border-primary bg-primary px-8 py-4 font-cinzel text-[11px] uppercase tracking-[0.25em] text-primary-foreground transition-all duration-500 gold-glow-hover hover:scale-[1.03]"
+                >
+                  Explore Collection
+                  <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+                </Link>
+                <Link
+                  to="/about"
+                  className="inline-flex items-center gap-3 border border-white/20 bg-white/8 px-8 py-4 font-cinzel text-[11px] uppercase tracking-[0.25em] text-white backdrop-blur-sm transition-colors duration-300 hover:border-primary hover:text-primary"
+                >
+                  Our Story
+                </Link>
+              </div>
             </div>
-
-            {/* Floating accent badge — hidden on mobile */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 1.0 }}
-              className="hidden sm:block absolute top-12 right-0 lg:right-4 border border-primary/30 bg-background/80 backdrop-blur-sm px-5 py-3 text-left"
-            >
-              <p className="font-cinzel text-[9px] tracking-[0.35em] text-primary uppercase mb-0.5">Signature</p>
-              <p className="font-cormorant text-sm italic text-foreground/70">Noir Collection</p>
-            </motion.div>
-
-            {/* Floating scent note — hidden on mobile */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 1.15 }}
-              className="hidden sm:block absolute bottom-16 left-0 lg:-left-4 border border-border/60 bg-background/80 backdrop-blur-sm px-5 py-3"
-            >
-              <p className="font-cinzel text-[9px] tracking-[0.35em] text-muted-foreground uppercase mb-1">Top Notes</p>
-              <p className="font-cormorant text-sm text-foreground/80">Oud · Amber · Musk</p>
-            </motion.div>
           </motion.div>
         </div>
 
@@ -206,7 +163,7 @@ const Index = () => {
       </section>
 
       {/* Featured Perfumes */}
-      <section className="py-24 px-6">
+      <ParallaxSection className="overflow-hidden py-24 px-6">
         <div className="container mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -238,10 +195,10 @@ const Index = () => {
             </Link>
           </div>
         </div>
-      </section>
+      </ParallaxSection>
 
       {/* Why Choose Us */}
-      <section className="py-24 px-6 bg-secondary">
+      <ParallaxSection className="overflow-hidden bg-secondary py-24 px-6">
         <div className="container mx-auto max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -273,10 +230,10 @@ const Index = () => {
             ))}
           </div>
         </div>
-      </section>
+      </ParallaxSection>
 
       {/* Testimonials */}
-      <section className="py-24 px-6">
+      <ParallaxSection className="overflow-hidden py-24 px-6">
         <div className="container mx-auto max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -308,10 +265,10 @@ const Index = () => {
             ))}
           </div>
         </div>
-      </section>
+      </ParallaxSection>
 
       {/* Final CTA */}
-      <section className="py-32 px-6 bg-secondary relative overflow-hidden">
+      <ParallaxSection className="relative overflow-hidden bg-secondary py-32 px-6">
         <div className="absolute inset-0 opacity-5">
           <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-primary/30 blur-[150px]" />
         </div>
@@ -334,7 +291,7 @@ const Index = () => {
             </Link>
           </motion.div>
         </div>
-      </section>
+      </ParallaxSection>
     </main>
   );
 };
