@@ -43,6 +43,7 @@ export interface ProductDB {
   top_notes: string[];
   middle_notes: string[];
   base_notes: string[];
+  is_out_of_stock?: boolean;
   is_active?: boolean;
   created_at?: string;
   updated_at?: string;

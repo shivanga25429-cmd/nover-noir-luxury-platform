@@ -46,6 +46,8 @@ const ProductDetail = () => {
     );
   }
 
+  const isOutOfStock = product.isOutOfStock;
+
   return (
     <main className="pt-24 pb-20">
       <div className="container mx-auto max-w-6xl px-6">
@@ -76,6 +78,11 @@ const ProductDetail = () => {
 
             {/* Inline badges */}
             <div className="flex items-center gap-2 mb-5">
+              {isOutOfStock && (
+                <span className="font-cinzel text-[9px] tracking-[0.3em] uppercase bg-destructive text-destructive-foreground px-3 py-1">
+                  Out of Stock
+                </span>
+              )}
               {product.price === 479 && (
                 <span className="font-cinzel text-[9px] tracking-[0.3em] uppercase bg-primary text-primary-foreground px-3 py-1">
                   Attar
@@ -124,7 +131,7 @@ const ProductDetail = () => {
             </div>
 
             <div className="flex items-center gap-3 mb-4">
-              <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="w-9 h-9 grid place-items-center border border-border rounded-sm">
+              <button disabled={isOutOfStock} onClick={() => setQty((q) => Math.max(1, q - 1))} className="w-9 h-9 grid place-items-center border border-border rounded-sm disabled:opacity-50">
                 <Minus className="w-4 h-4" />
               </button>
               <input
@@ -132,22 +139,28 @@ const ProductDetail = () => {
                 min={1}
                 value={qty}
                 onChange={(e) => setQty(Math.max(1, Number(e.target.value) || 1))}
-                className="w-16 text-center bg-secondary border border-border rounded-sm h-9"
+                disabled={isOutOfStock}
+                className="w-16 text-center bg-secondary border border-border rounded-sm h-9 disabled:opacity-50"
               />
-              <button onClick={() => setQty((q) => q + 1)} className="w-9 h-9 grid place-items-center border border-border rounded-sm">
+              <button disabled={isOutOfStock} onClick={() => setQty((q) => q + 1)} className="w-9 h-9 grid place-items-center border border-border rounded-sm disabled:opacity-50">
                 <Plus className="w-4 h-4" />
               </button>
             </div>
 
             <button
               onClick={() => {
+                if (isOutOfStock) {
+                  toast.error("Out of stock", { description: `${product.name} is currently unavailable.` });
+                  return;
+                }
                 addToCart(product, qty);
                 toast.success("Added to cart", { description: `${qty} × ${product.name} added to your cart.` });
               }}
-              className="flex items-center justify-center gap-3 bg-primary text-primary-foreground font-cinzel text-sm tracking-[0.2em] uppercase px-10 py-4 transition-all duration-500 gold-glow-hover hover:scale-[1.02] w-full lg:w-auto"
+              disabled={isOutOfStock}
+              className="flex items-center justify-center gap-3 bg-primary text-primary-foreground font-cinzel text-sm tracking-[0.2em] uppercase px-10 py-4 transition-all duration-500 gold-glow-hover hover:scale-[1.02] w-full lg:w-auto disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
             >
               <ShoppingBag className="w-4 h-4" />
-              Add to Cart
+              {isOutOfStock ? "Out of Stock" : "Add to Cart"}
             </button>
           </motion.div>
         </div>

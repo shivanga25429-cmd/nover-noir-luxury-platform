@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
-import { apiClient, Address, OrderItem } from "@/lib/api";
+import { apiClient, Address, CouponValidation, OrderItem } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, MapPin, Plus, Edit2, Trash2, CheckCircle2 } from "lucide-react";
 import { AuthDialog } from "@/components/AuthDialog";
@@ -139,14 +139,19 @@ export default function Checkout() {
   const [shippingCost, setShippingCost] = useState(49);
   const [shippingThreshold, setShippingThreshold] = useState(2000);
   const [shippingLoaded, setShippingLoaded] = useState(false);
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState<CouponValidation | null>(null);
+  const [couponMsg, setCouponMsg] = useState("");
+  const [validatingCoupon, setValidatingCoupon] = useState(false);
 
   const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:3000';
 
   const subtotal = totalPrice;
+  const discount = appliedCoupon?.discount_amount ?? 0;
   const tax = 0;
   // Mirror server logic exactly: free if subtotal > threshold (strictly greater than)
   const shipping = subtotal === 0 ? 0 : subtotal > shippingThreshold ? 0 : shippingCost;
-  const total = parseFloat((subtotal + shipping).toFixed(2));
+  const total = parseFloat((subtotal - discount + shipping).toFixed(2));
 
   // Fetch dynamic shipping config
   useEffect(() => {
@@ -168,6 +173,11 @@ export default function Checkout() {
   }, [user]);
 
   const client = () => apiClient(session?.access_token ?? "");
+
+  useEffect(() => {
+    setAppliedCoupon(null);
+    setCouponMsg("");
+  }, [items]);
 
   const loadAddresses = async () => {
     try {
@@ -253,6 +263,7 @@ export default function Checkout() {
       const paymentData = await client().orders.createPayment({
         items: orderItems,
         address_id: selectedAddressId,
+        coupon_code: appliedCoupon?.code,
       });
 
       // Step 2 — Open Razorpay checkout
@@ -311,6 +322,31 @@ export default function Checkout() {
       }
     } finally {
       setProcessingPayment(false);
+    }
+  };
+
+  const handleApplyCoupon = async () => {
+    if (!user || !session) { setAuthOpen(true); return; }
+    const code = couponCode.trim();
+    if (!code) {
+      setCouponMsg("Enter a coupon code");
+      return;
+    }
+    setValidatingCoupon(true);
+    setCouponMsg("");
+    try {
+      const data = await client().coupons.validate({
+        code,
+        items: items.map((item) => ({ product_id: item.product.id, quantity: item.quantity })),
+      });
+      setAppliedCoupon(data);
+      setCouponCode(data.code);
+      setCouponMsg(`Applied ₹${data.discount_amount.toFixed(2)} discount`);
+    } catch (err: unknown) {
+      setAppliedCoupon(null);
+      setCouponMsg((err as Error).message);
+    } finally {
+      setValidatingCoupon(false);
     }
   };
 
@@ -460,6 +496,50 @@ export default function Checkout() {
                   : <span className="text-muted-foreground animate-pulse">Calculating…</span>
                 }
               </div>
+              <div className="border-t border-border pt-3 space-y-2">
+                <label className="block text-xs text-muted-foreground">Coupon Code</label>
+                <div className="flex gap-2">
+                  <input
+                    value={couponCode}
+                    onChange={(e) => {
+                      setCouponCode(e.target.value.toUpperCase());
+                      setAppliedCoupon(null);
+                      setCouponMsg("");
+                    }}
+                    placeholder="NOVER10"
+                    className="min-w-0 flex-1 px-3 py-2 border border-border rounded-sm text-sm bg-background"
+                  />
+                  <button
+                    onClick={handleApplyCoupon}
+                    disabled={validatingCoupon}
+                    className="px-3 py-2 bg-secondary text-foreground border border-border rounded-sm text-xs uppercase tracking-[0.12em] disabled:opacity-50"
+                  >
+                    {validatingCoupon ? "Checking" : "Apply"}
+                  </button>
+                </div>
+                {couponMsg && (
+                  <p className={`text-xs ${appliedCoupon ? "text-green-600 dark:text-green-400" : "text-destructive"}`}>
+                    {couponMsg}
+                  </p>
+                )}
+                {appliedCoupon && (
+                  <button
+                    onClick={() => {
+                      setAppliedCoupon(null);
+                      setCouponMsg("");
+                    }}
+                    className="text-xs text-muted-foreground underline"
+                  >
+                    Remove coupon
+                  </button>
+                )}
+              </div>
+              {discount > 0 && (
+                <div className="flex justify-between text-sm text-green-600 dark:text-green-400">
+                  <span>Coupon Discount</span>
+                  <span>-₹{discount.toFixed(2)}</span>
+                </div>
+              )}
               <div className="border-t border-border pt-3 flex justify-between font-cinzel text-lg">
                 <span>Total</span>
                 {shippingLoaded

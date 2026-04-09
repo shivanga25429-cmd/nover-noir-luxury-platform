@@ -95,7 +95,10 @@ CREATE TABLE IF NOT EXISTS public.products (
     middle_notes TEXT[] DEFAULT '{}',
     base_notes TEXT[] DEFAULT '{}',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    original_price DECIMAL(10,2) NULL,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    is_out_of_stock BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 -- Indexes for products

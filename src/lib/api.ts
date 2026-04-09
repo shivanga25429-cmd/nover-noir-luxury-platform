@@ -55,6 +55,9 @@ export interface Order {
   subtotal: number;
   tax: number;
   shipping: number;
+  discount_amount?: number;
+  coupon_id?: string | null;
+  coupon_code?: string | null;
   total: number;
   status: OrderStatus;
   tracking_id: string | null;
@@ -82,6 +85,15 @@ export interface CreatePaymentResponse {
   order_id: string;
   key_id: string;
   prefill: { name: string; email: string; contact: string };
+}
+
+export interface CouponValidation {
+  code: string;
+  discount_type: 'percentage' | 'fixed_amount';
+  discount_value: number;
+  discount_amount: number;
+  eligible_subtotal: number;
+  eligible_product_ids: string[];
 }
 
 // ─── Client factory ──────────────────────────────────────────────────────────
@@ -158,6 +170,7 @@ export function apiClient(accessToken: string) {
       createPayment: (body: {
         items: OrderItem[];
         address_id: string;
+        coupon_code?: string;
         notes?: string;
       }) =>
         fetch_<CreatePaymentResponse>('/api/orders/create-payment', {
@@ -196,6 +209,15 @@ export function apiClient(accessToken: string) {
         return fetch_<unknown[]>(`/api/products${qs ? '?' + qs : ''}`);
       },
       get: (id: string) => fetch_<unknown>(`/api/products/${id}`),
+    },
+
+    // ── Coupons ─────────────────────────────────────────────────────────
+    coupons: {
+      validate: (body: { code: string; items: { product_id: string; quantity: number }[] }) =>
+        fetch_<CouponValidation>('/api/coupons/validate', {
+          method: 'POST',
+          body: JSON.stringify(body),
+        }),
     },
   };
 }

@@ -17,6 +17,7 @@ export interface Product {
   topNotes: string[];
   middleNotes: string[];
   baseNotes: string[];
+  isOutOfStock: boolean;
   reviews: Review[];
 }
 
@@ -60,6 +61,7 @@ function mapProductFromDB(dbProduct: ProductDB): Product {
     topNotes: dbProduct.top_notes || [],
     middleNotes: dbProduct.middle_notes || [],
     baseNotes: dbProduct.base_notes || [],
+    isOutOfStock: dbProduct.is_out_of_stock ?? false,
     reviews: productReviews[dbProduct.id] || [],
   };
 }

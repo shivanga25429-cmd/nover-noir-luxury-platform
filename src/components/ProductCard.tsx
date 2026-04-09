@@ -14,6 +14,7 @@ interface ProductCardProps {
 const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
   const { addToCart } = useCart();
   const [qty, setQty] = useState<number>(1);
+  const isOutOfStock = product.isOutOfStock;
 
   return (
     <motion.div
@@ -32,9 +33,21 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
             loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          {isOutOfStock && (
+            <div className="absolute inset-0 grid place-items-center bg-background/55 backdrop-blur-[1px]">
+              <span className="font-cinzel text-[10px] tracking-[0.28em] uppercase bg-background text-primary border border-primary/50 px-4 py-2">
+                Out of Stock
+              </span>
+            </div>
+          )}
 
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-1.5">
+            {isOutOfStock && (
+              <span className="font-cinzel text-[9px] tracking-[0.25em] uppercase bg-destructive text-destructive-foreground px-2.5 py-1">
+                Out of Stock
+              </span>
+            )}
             {product.price === 479 && (
               <span className="font-cinzel text-[9px] tracking-[0.25em] uppercase bg-primary text-primary-foreground px-2.5 py-1">
                 Attar
@@ -71,6 +84,7 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setQty((q) => Math.max(1, q - 1))}
+            disabled={isOutOfStock}
             className="w-8 h-8 grid place-items-center border border-border rounded-sm"
             aria-label="Decrease quantity"
           >
@@ -81,10 +95,12 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
             min={1}
             value={qty}
             onChange={(e) => setQty(Math.max(1, Number(e.target.value) || 1))}
-            className="w-12 text-center bg-secondary border border-border rounded-sm h-8"
+            disabled={isOutOfStock}
+            className="w-12 text-center bg-secondary border border-border rounded-sm h-8 disabled:opacity-50"
           />
           <button
             onClick={() => setQty((q) => q + 1)}
+            disabled={isOutOfStock}
             className="w-8 h-8 grid place-items-center border border-border rounded-sm"
             aria-label="Increase quantity"
           >
@@ -93,13 +109,18 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
         </div>
         <button
           onClick={() => {
+            if (isOutOfStock) {
+              toast.error("Out of stock", { description: `${product.name} is currently unavailable.` });
+              return;
+            }
             addToCart(product, qty);
             toast.success("Added to cart", { description: `${qty} × ${product.name} added to your cart.` });
           }}
-          className="flex items-center gap-2 text-xs tracking-[0.15em] uppercase text-muted-foreground hover:text-primary transition-all duration-300 group/btn"
+          disabled={isOutOfStock}
+          className="flex items-center gap-2 text-xs tracking-[0.15em] uppercase text-muted-foreground hover:text-primary transition-all duration-300 group/btn disabled:cursor-not-allowed disabled:text-muted-foreground/60"
         >
           <ShoppingBag className="w-3.5 h-3.5" />
-          Add to Cart
+          {isOutOfStock ? "Out of Stock" : "Add to Cart"}
         </button>
       </div>
     </motion.div>
